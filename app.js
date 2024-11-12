@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const userRouter = require('./routes/user');
+const usersRouter = require('./routes/users');
 require('dotenv').config();
 
 const port = process.env.PORT || 3000;
@@ -9,15 +9,15 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 // Routes
-app.use('/api/user', userRouter);
+app.use('/api/users', usersRouter);
 
 // Default routes
 app.get('/', (req, res) => {
-  res.send('Welcome. Available routes: /api/user');
+  res.send('Welcome. Available routes: /api/users');
 });
 
 app.get('/api', (req, res) => {
-  res.send('Welcome to the API. Available routes: /api/user');
+  res.send('Welcome to the API. Available routes: /api/users');
 });
 
 app.listen(port, () => {
