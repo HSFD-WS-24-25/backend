@@ -1,4 +1,4 @@
-Setup "Backend" repository
+Setup "backend" repository
 ---
 1. Download [Node.js](https://nodejs.org/en).
 2. Install Node.js and select the option to automatically install tools (we need npm). [This may take a while]
