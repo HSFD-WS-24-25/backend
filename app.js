@@ -1,12 +1,16 @@
 const express = require('express');
 const app = express();
 const usersRouter = require('./routes/users');
+const { swaggerDocs, swaggerUi } = require('./swagger');
+const { DEFAULT_PORT } = require('./config/constants');
 require('dotenv').config();
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || DEFAULT_PORT;
 
 // Middleware
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Routes
 app.use('/api/users', usersRouter);
