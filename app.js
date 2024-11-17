@@ -1,25 +1,22 @@
 const express = require('express');
 const app = express();
-const usersRouter = require('./routes/users');
-require('dotenv').config();
+const { auth } = require('express-oauth2-jwt-bearer');
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
-// Middleware
-app.use(express.json());
-
-// Routes
-app.use('/api/users', usersRouter);
-
-// Default routes
-app.get('/', (req, res) => {
-  res.send('Welcome. Available routes: /api/users');
+const jwtCheck = auth({
+  audience: 'http://localhost:3001/api',
+  issuerBaseURL: 'https://dev-boc0av4c0bacnon6.us.auth0.com/',
+  tokenSigningAlg: 'RS256'
 });
 
-app.get('/api', (req, res) => {
-  res.send('Welcome to the API. Available routes: /api/users');
+// enforce on all endpoints
+app.use(jwtCheck);
+
+app.get('/authorized', function (req, res) {
+    res.send('Secured Resource');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(port);
+
+console.log('Running on port ', port);

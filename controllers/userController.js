@@ -1,3 +1,5 @@
+const users = require('../models/users.json');
+
 exports.getAllUsers = (req, res) => {
-    res.send('List of all users');
-}
+    res.json(users); // Sends the JSON data
+};
