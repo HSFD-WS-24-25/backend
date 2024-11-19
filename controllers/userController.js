@@ -1,5 +1,13 @@
-const users = require('../models/users.json');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-exports.getAllUsers = (req, res) => {
-    res.json(users); // Sends the JSON data
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Something went wrong' });
+  }
 };
+
+module.exports = { getAllUsers };
