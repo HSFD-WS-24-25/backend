@@ -1,7 +1,7 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy Node.js app to Azure Web App - Backend-and-Database
+name: Build and deploy Node.js app to Azure Web App - backend-and-database
 
 on:
   push:
@@ -25,7 +25,7 @@ jobs:
         run: |
           npm install
           npm run build --if-present
-        # npm run test --if-present
+          npm run test --if-present
 
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
@@ -57,15 +57,15 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5EDFD9B5D1044B3B866A03C51BA3E2E2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_859918774F4F4C7186C1F811835E70A2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_84CE990EB5974DE59C3E10D780DD2166 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_207460CEF3D8450CA390113FB4F44F45 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_9609CEC67DAB4EE68F8C1A69C5E4EE70 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2F8D9075030F47A792AE5D59A903ABB0 }}
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'Backend-and-Database'
+          app-name: 'backend-and-database'
           slot-name: 'Production'
           package: .
           
