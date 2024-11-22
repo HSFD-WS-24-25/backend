@@ -6,7 +6,10 @@ require('dotenv').config();
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
+const eventRoutes = require('./routes/events');
 const port = process.env.PORT || 3001;
+
+app.use('/api/events', eventRoutes);
 
 // Enable CORS everywhere
 app.use(cors());
