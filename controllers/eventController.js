@@ -1,4 +1,4 @@
-const prisma = require('./prisma');
+const prisma = require('../models/prisma');
 
 const getAllEvents = async (req, res) => {
     try {
