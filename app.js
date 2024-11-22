@@ -4,11 +4,17 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 const { getAllUsers } = require('./controllers/userController');
 require('dotenv').config();
 const cors = require('cors');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpecs = require('./config/swagger');
 const port = process.env.PORT || 3001;
 
 // Enable CORS everywhere
 app.use(cors());
 
+// Add Swagger UI 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+console.log(`Swagger at http://localhost:${port}/api-docs`);
 
 // Authorization middleware. When used, the Access Token must
 // exist and be verified against the Auth0 JSON Web Key Set.
