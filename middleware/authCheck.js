@@ -7,7 +7,7 @@ const authCheck = jwt({
     cache: true,
     rateLimit: true,
     jwksRequestsPerMinute: 5,
-    jwksUri: `https://your-auth0-domain/.well-known/jwks.json`,
+    jwksUri: `https://dev-boc0av4c0bacnon6.us.auth0.com/.well-known/jwks.json`,
   }),
   audience: 'http://localhost:3001/api',
   issuer: `https://dev-boc0av4c0bacnon6.us.auth0.com/`,
