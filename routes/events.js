@@ -17,16 +17,24 @@ const { getAllEvents } = require('../controllers/eventController');
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               name:
  *                 type: string
  *               description:
  *                 type: string
- *                 nullable: true
- *               date:
+ *               date_start:
+ *                 type: string
+ *                 format: date-time
+ *               date_end:
  *                 type: string
  *                 format: date-time
  *               location:
  *                 type: string
+ *               capacity:
+ *                 type: integer
+ *               reminder:
+ *                 type: integer
+ *               max_additional_guests:
+ *                 type: integer
  *     responses:
  *       201:
  *         description: Event created successfully
@@ -46,11 +54,40 @@ const { getAllEvents } = require('../controllers/eventController');
  *       - Events
  *     responses:
  *       200:
- *         description: List of events
+ *         description: A list of events
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
  *       500:
  *         description: Internal Server Error
  */
 // router.get('/', getAllEvents);
+
+/**
+ * @swagger
+ * /events/{id}:
+ *   get:
+ *     summary: Retrieve a single event by ID
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: The event details
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal Server Error
+ */
+//router.get('/:id', getEventById);
 
 /**
  * @swagger
@@ -72,16 +109,24 @@ const { getAllEvents } = require('../controllers/eventController');
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               name:
  *                 type: string
  *               description:
  *                 type: string
- *                 nullable: true
- *               date:
+ *               date_start:
+ *                 type: string
+ *                 format: date-time
+ *               date_end:
  *                 type: string
  *                 format: date-time
  *               location:
  *                 type: string
+ *               capacity:
+ *                 type: integer
+ *               reminder:
+ *                 type: integer
+ *               max_additional_guests:
+ *                 type: integer
  *     responses:
  *       200:
  *         description: Event updated successfully
@@ -90,7 +135,7 @@ const { getAllEvents } = require('../controllers/eventController');
  *       500:
  *         description: Internal Server Error
  */
-// router.put('/:id', updateEvent);
+//router.put('/:id', updateEvent);
 
 /**
  * @swagger
@@ -113,6 +158,6 @@ const { getAllEvents } = require('../controllers/eventController');
  *       500:
  *         description: Internal Server Error
  */
-// router.delete('/:id', deleteEvent);
+//router.delete('/:id', deleteEvent);
 
 module.exports = router;
