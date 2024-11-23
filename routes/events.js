@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllEvents, getEventById } = require('../controllers/eventController');
+const { getAllEvents, getEventById, getEventByName } = require('../controllers/eventController');
 
 /**
  * @swagger
@@ -159,5 +159,28 @@ router.get('/:id', getEventById);
  *         description: Internal Server Error
  */
 //router.delete('/:id', deleteEvent);
+
+/**
+ * @swagger
+ * /events/name/{name}:
+ *   get:
+ *     summary: Retrieve events with names containing the search term
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: name
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of matching events
+ *       404:
+ *         description: No matching events found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/name/:name', getEventByName);
 
 module.exports = router;
