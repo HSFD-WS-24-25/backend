@@ -1,22 +1,24 @@
-// config/swagger.js
-const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerJSDoc = require('swagger-jsdoc');
 
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentation',
+      title: 'Meeting Organization API',
       version: '1.0.0',
-      description: 'A sample API for demonstrating Swagger',
+      description: 'API documentation for the meeting organization application',
     },
     servers: [
       {
-        url: 'http://localhost:3001/api', // Replace with server URL
+        url: 'http://localhost:3000', // Update this URL
+        // to match your backend server
+        description: 'Development Server',
       },
     ],
   },
-  apis: ['./routes/*.js', './controllers/*.js'],
+  apis: ['./routes/*.js', './controllers/*.js'], // Include files for endpoint documentation
 };
 
-const specs = swaggerJsdoc(options);
-module.exports = specs;
+const swaggerSpec = swaggerJSDoc(options);
+
+module.exports = swaggerSpec;
