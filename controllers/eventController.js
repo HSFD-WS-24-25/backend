@@ -8,18 +8,20 @@ const getAllEvents = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   };
-/**
-  const createEvent = async (req, res) => {
-    const { title, description, date, location } = req.body;
-  
-    try {
-      const newEvent = await prisma.event.create({
-        data: { title, description, date: new Date(date), location },
-      });
-      res.status(201).json(newEvent);
-    } catch (error) {
-      res.status(500).json({ error: 'Internal server error' });
+
+const getEventById = async (req, res) => { 
+  const { id } = req.params;
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: parseInt(id) },
+    });
+    if (!event) {
+      return res.status(404).json({ error: 'Event not found' });
     }
-  };
-**/
-module.exports = { getAllEvents };
+    res.json(event);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports = { getAllEvents, getEventById };

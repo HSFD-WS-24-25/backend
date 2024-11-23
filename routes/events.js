@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllEvents } = require('../controllers/eventController');
+const { getAllEvents, getEventById } = require('../controllers/eventController');
 
 /**
  * @swagger
@@ -64,7 +64,7 @@ const { getAllEvents } = require('../controllers/eventController');
  *       500:
  *         description: Internal Server Error
  */
-// router.get('/', getAllEvents);
+router.get('/', getAllEvents);
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ const { getAllEvents } = require('../controllers/eventController');
  *       500:
  *         description: Internal Server Error
  */
-//router.get('/:id', getEventById);
+router.get('/:id', getEventById);
 
 /**
  * @swagger
