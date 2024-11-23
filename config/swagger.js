@@ -10,8 +10,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000', // Update this URL
-        // to match your backend server
+        url: 'http://localhost:3000',
         description: 'Development Server',
       },
     ],
