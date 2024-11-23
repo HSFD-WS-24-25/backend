@@ -11,7 +11,7 @@ const port = process.env.PORT || 3001;
 // Enable CORS everywhere
 app.use(cors());
 
-// Add Swagger UI 
+// Add Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
 console.log(`Swagger at http://localhost:${port}/api-docs`);
@@ -51,7 +51,7 @@ app.get('/api/private-scoped', checkJwt, checkScopes, function(req, res) {
   });
 });
 
-
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+  console.log(`Swagger docs available at http://localhost:${port}/api-docs`);
 });

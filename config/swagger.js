@@ -15,7 +15,7 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js', './controllers/*.js'], // Include files for endpoint documentation
+  apis: ['./routes/users.js', './controllers/userController.js'], // Include files for endpoint documentation
 };
 
 const swaggerSpec = swaggerJSDoc(options);

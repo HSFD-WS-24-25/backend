@@ -79,3 +79,4 @@ model Event {
 
   @@map("events")
 }
+
