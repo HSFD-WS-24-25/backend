@@ -5,9 +5,13 @@ const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'API Documentation',
+      title: 'Event Organizer: API Documentation/Test',
       version: '1.0.0',
-      description: 'A sample API for demonstrating Swagger',
+      description: 'This is a sample Event Organizer Server based on the OpenAPI 3.0 specification.',
+      externalDocs: {
+        description: 'Find out more about Event Organizer',
+        url: 'https://github.com/HSFD-WS-24-25/backend/blob/main/README.md',
+      },
     },
     servers: [
       {
