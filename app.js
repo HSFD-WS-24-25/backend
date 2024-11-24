@@ -1,19 +1,20 @@
 const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
-const { getAllUsers } = require('./controllers/userController');  //???
 require('dotenv').config();
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
-const eventRoutes = require('./routes/events');
+const indexRoutes = require('./routes/index');
 const port = process.env.PORT || 3001;
-
 
 // Enable CORS everywhere
 app.use(cors());
+
 app.use(express.json());
-app.use('/api/events', eventRoutes);
+
+// Define all routes in routes/index.js
+app.use('/api', indexRoutes);
 
 // Add Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
