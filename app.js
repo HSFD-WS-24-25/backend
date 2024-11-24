@@ -9,10 +9,11 @@ const swaggerSpecs = require('./config/swagger');
 const eventRoutes = require('./routes/events');
 const port = process.env.PORT || 3001;
 
-app.use('/api/events', eventRoutes);
 
 // Enable CORS everywhere
 app.use(cors());
+app.use(express.json());
+app.use('/api/events', eventRoutes);
 
 // Add Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));

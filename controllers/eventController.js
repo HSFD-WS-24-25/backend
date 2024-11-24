@@ -48,28 +48,28 @@ const getEventByName = async (req, res) => {
   }
 };
 
-const storeEvent = async (req, res) => {
+const createEvent = async (req, res) => {
   try {
+    const { name, description, location, capacity, reminder, max_additional_guests } = req.body;
+    const date_start = new Date(req.body.date_start);
+    const date_end = new Date(req.body.date_end);
+
     const events = await prisma.event.create({
       data: {
-        name: req.name,
-        description: req.description,
-        date_start: req.date_start,
-        date_end:req.date_end,
-        location: req.location,
-        capacity: req.capacity,
-        reminder: req.reminder,
-        max_additional_guests: req.max_additional_guests
+        name,
+        description,
+        location,
+        date_start,
+        date_end,
+        capacity,
+        reminder,
+        max_additional_guests
       }
     });
-    res.status(201).json({ success: 'Internal server error' });
+    res.json({ success: { message: 'Successfully saved', values: events } });
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
+    res.json({ error: { message: 'Error saving event. Please try again' } });
   }
 };
 
-
-
-
-
-module.exports = { getAllEvents, getEventById, getEventByName, storeEvent };
+module.exports = { getAllEvents, getEventById, getEventByName, createEvent };
