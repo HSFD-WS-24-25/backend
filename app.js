@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
-const { getAllUsers } = require('./controllers/userController');
+const { getAllUsers } = require('./controllers/userController');  //???
 require('dotenv').config();
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
