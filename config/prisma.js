@@ -2,8 +2,7 @@
 const { PrismaClient } = require('@prisma/client');
 
 let prisma;
-
-if (!prisma) {
+if (! prisma) {
   prisma = new PrismaClient();
 }
 
