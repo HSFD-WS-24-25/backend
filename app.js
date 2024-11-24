@@ -14,7 +14,7 @@ app.use(cors());
 // Enable JSON parsing
 app.use(express.json());
 
-// Define all routes in routes/index.js
+// Define all api routes in routes/index.js
 app.use('/api', indexRoutes);
 
 // Add Swagger UI 
