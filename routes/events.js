@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const { getAllEvents, getEventById, getEventByName, createEvent } = require('../controllers/eventController');
+const { validateEvent } = require('../validators/eventValidator');
+const handleValidationErrors = require('../middleware/validationMiddleware');
 
 // https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
 /**
@@ -44,7 +46,7 @@ const { getAllEvents, getEventById, getEventByName, createEvent } = require('../
  *       500:
  *         description: Internal Server Error
  */
-router.post('/', createEvent);
+router.post('/', validateEvent, handleValidationErrors, createEvent);
 
 /**
  * @swagger
