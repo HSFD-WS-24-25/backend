@@ -1,4 +1,4 @@
-const prisma = require('../config/prisma');
+const prisma = require('../config/database/prisma');
 
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
@@ -122,4 +122,4 @@ const getEventByLocation = async (req, res) => {
   }
 };
 
-module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent, getEventByLocation };
+module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById, getEventByName, getEventByLocation };
