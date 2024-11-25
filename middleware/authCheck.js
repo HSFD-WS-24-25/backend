@@ -1,3 +1,4 @@
+// TODO: Are we using this file? If not, remove it.
 // authCheck.js middleware
 const jwt = require('express-jwt');
 const jwks = require('jwks-rsa');
