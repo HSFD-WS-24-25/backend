@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent } = require('../controllers/eventController');
+const { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent, getEventByLocation } = require('../controllers/eventController');
 
 // https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
 /**
@@ -183,5 +183,28 @@ router.delete('/:id', deleteEvent);
  *         description: Internal server error
  */
 router.get('/name/:name', getEventByName);
+
+/**
+ * @swagger
+ * /events/location/{location}:
+ *   get:
+ *     summary: Retrieve events with locations containing the search term
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: location
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: A list of matching events
+ *       404:
+ *         description: No matching events found
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/location/:location', getEventByLocation);
 
 module.exports = router;

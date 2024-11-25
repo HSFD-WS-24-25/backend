@@ -98,4 +98,28 @@ const updateEvent = async (req, res) => {
   }
 };
 
-module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent };
+const getEventByLocation = async (req, res) => {
+  const { location } = req.params;
+
+  try {
+    const events = await prisma.event.findMany({
+      where: {
+        location: {
+          contains: location, // Partial match
+          mode: 'insensitive', // Case-insensitive search
+        },
+      },
+    });
+
+    if (events.length === 0) {
+      return res.status(404).json({ error: 'No events found matching the location' });
+    }
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error('Error fetching events:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent, getEventByLocation };
