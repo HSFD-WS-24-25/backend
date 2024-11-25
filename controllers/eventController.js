@@ -84,4 +84,17 @@ const deleteEvent = async (req, res) => {
   }
 };
 
-module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent };
+const updateEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedEvent = await prisma.event.update({
+      where: { id: parseInt(id, 10) },
+      data: req.body,
+    });
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update event" });
+  }
+};
+
+module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent };

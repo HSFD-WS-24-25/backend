@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent } = require('../controllers/eventController');
+const { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent, updateEvent } = require('../controllers/eventController');
 
 // https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
 /**
@@ -136,7 +136,7 @@ router.get('/:id', getEventById);
  *       500:
  *         description: Internal Server Error
  */
-//router.put('/:id', updateEvent);
+router.put('/:id', updateEvent);
 
 /**
  * @swagger
