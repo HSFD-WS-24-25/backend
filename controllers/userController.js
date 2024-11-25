@@ -1,10 +1,9 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma');
 
 const getAllUsers = async (req, res) => {
   try {
     const users = await prisma.user.findMany();
-    res.json(users);
+    res.json(require('../models/users.json'));
   } catch (error) {
     res.status(500).json({ error: 'Something went wrong' });
   }
