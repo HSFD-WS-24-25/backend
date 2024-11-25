@@ -72,4 +72,16 @@ const createEvent = async (req, res) => {
   }
 };
 
-module.exports = { getAllEvents, getEventById, getEventByName, createEvent };
+const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.event.delete({
+      where: { id: parseInt(id, 10) },
+    });
+    res.status(204).send(); 
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete event" });
+  }
+};
+
+module.exports = { getAllEvents, getEventById, getEventByName, createEvent, deleteEvent };
