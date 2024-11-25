@@ -1,5 +1,6 @@
 const prisma = require('../config/prisma');
 
+// https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
   try {
     const events = await prisma.event.findMany();
