@@ -1,5 +1,6 @@
-const prisma = require('../config/prisma');
+const prisma = require('../config/database/prisma');
 
+// https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
   try {
     const events = await prisma.event.findMany();
@@ -20,30 +21,6 @@ const getEventById = async (req, res) => {
     }
     res.json(event);
   } catch (error) {
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-const getEventByName = async (req, res) => {
-  const { name } = req.params;
-
-  try {
-    const events = await prisma.event.findMany({
-      where: {
-        name: {
-          contains: name, // Partial match
-          mode: 'insensitive', // Case-insensitive search
-        },
-      },
-    });
-
-    if (events.length === 0) {
-      return res.status(404).json({ error: 'No events found matching the name' });
-    }
-
-    res.status(200).json(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -72,4 +49,29 @@ const createEvent = async (req, res) => {
   }
 };
 
-module.exports = { getAllEvents, getEventById, getEventByName, createEvent };
+const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await prisma.event.delete({
+      where: { id: parseInt(id, 10) },
+    });
+    res.status(204).send(); 
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete event" });
+  }
+};
+
+const updateEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedEvent = await prisma.event.update({
+      where: { id: parseInt(id, 10) },
+      data: req.body,
+    });
+    res.status(200).json(updatedEvent);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update event" });
+  }
+};
+
+module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById };
