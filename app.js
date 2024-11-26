@@ -8,8 +8,13 @@ const apiRoutes = require('./routes/api/index');
 const { PORT } = require('./config/constants');
 const port = process.env.PORT || PORT;
 
-// Enable CORS everywhere
-app.use(cors());
+// Enable CORS only for the client URL specified in environment variables
+// TODO: Do we need more options? (https://expressjs.com/en/resources/middleware/cors.html)
+const corsOptions = {
+  origin: process.env.CLIENT_URL,
+};
+
+app.use(cors(corsOptions));
 
 // Enable JSON parsing
 app.use(express.json());
