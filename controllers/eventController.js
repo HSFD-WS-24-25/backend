@@ -25,30 +25,6 @@ const getEventById = async (req, res) => {
   }
 };
 
-const getEventByName = async (req, res) => {
-  const { name } = req.params;
-
-  try {
-    const events = await prisma.event.findMany({
-      where: {
-        name: {
-          contains: name, // Partial match
-          mode: 'insensitive', // Case-insensitive search
-        },
-      },
-    });
-
-    if (events.length === 0) {
-      return res.status(404).json({ error: 'No events found matching the name' });
-    }
-
-    res.status(200).json(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
 const createEvent = async (req, res) => {
   try {
     const { name, description, location, capacity, reminder, max_additional_guests } = req.body;
@@ -98,28 +74,4 @@ const updateEvent = async (req, res) => {
   }
 };
 
-const getEventByLocation = async (req, res) => {
-  const { location } = req.params;
-
-  try {
-    const events = await prisma.event.findMany({
-      where: {
-        location: {
-          contains: location, // Partial match
-          mode: 'insensitive', // Case-insensitive search
-        },
-      },
-    });
-
-    if (events.length === 0) {
-      return res.status(404).json({ error: 'No events found matching the location' });
-    }
-
-    res.status(200).json(events);
-  } catch (error) {
-    console.error('Error fetching events:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
-module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById, getEventByName, getEventByLocation };
+module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById };

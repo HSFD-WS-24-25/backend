@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById, getEventByName, getEventByLocation } = require('../../controllers/eventController');
+const { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById } = require('../../controllers/eventController');
 const { validateEvent } = require('../../validators/eventValidator');
 const handleValidationErrors = require('../../middleware/validationMiddleware');
 
@@ -162,51 +162,5 @@ router.put('/:id', updateEvent);
  *         description: Internal Server Error
  */
 router.delete('/:id', deleteEvent);
-
-/**
- * @swagger
- * /events/name/{name}:
- *   get:
- *     summary: Retrieve events with names containing the search term
- *     tags:
- *       - Events
- *     parameters:
- *       - in: path
- *         name: name
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: A list of matching events
- *       404:
- *         description: No matching events found
- *       500:
- *         description: Internal server error
- */
-router.get('/name/:name', getEventByName);
-
-/**
- * @swagger
- * /events/location/{location}:
- *   get:
- *     summary: Retrieve events with locations containing the search term
- *     tags:
- *       - Events
- *     parameters:
- *       - in: path
- *         name: location
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: A list of matching events
- *       404:
- *         description: No matching events found
- *       500:
- *         description: Internal server error
- */
-router.get('/location/:location', getEventByLocation);
 
 module.exports = router;
