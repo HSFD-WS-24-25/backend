@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id           String        @id
+  id           Int           @id @default(autoincrement()) // ID wird automatisch hochgezählt
   email        String        @unique
   username     String        @unique @db.VarChar(50)
   first_name   String        @db.VarChar(50)
@@ -16,7 +16,7 @@ model User {
   telephone    String?       @db.VarChar(20)
   address      String?
   group_id     Int
-  participants Participant[]
+  participants Participant[] // Beziehung zur Participant-Tabelle
   group        Group         @relation(fields: [group_id], references: [id])
 
   @@map("users")
@@ -54,11 +54,11 @@ model Permission {
 
 model Participant {
   event_id         Int
-  user_id          String
+  user_id          Int
   status           String?
   additional_guest Int     @default(0)
 
-  user  User  @relation(fields: [user_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
   event Event @relation(fields: [event_id], references: [id])
 
   @@id([user_id, event_id])

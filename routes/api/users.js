@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { getAllUsers } = require('../../controllers/userController');
+const { getAllUsers, createUser, deleteUser, updateUser } = require('../../controllers/userController');
+const checkJwt = require('../../middleware/authMiddleware'); // JWT-Middleware importieren
 
 /**
  * @swagger
  * /users:
  *   get:
  *     summary: Retrieve a list of users
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - Users
  *     responses:
@@ -37,26 +40,16 @@ const { getAllUsers } = require('../../controllers/userController');
  *                     nullable: true
  *                   group_id:
  *                     type: integer
- *                   participants:
- *                     type: array
- *                     items:
- *                       type: object
- *                   group:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       name:
- *                         type: string
  */
-
-router.route('/').get(getAllUsers);
+router.route('/').get( getAllUsers); // GET /users mit JWT-Validierung
 
 /**
  * @swagger
  * /users:
  *   post:
  *     summary: Create a new user
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - Users
  *     requestBody:
@@ -80,22 +73,25 @@ router.route('/').get(getAllUsers);
  *               address:
  *                 type: string
  *                 nullable: true
+ *               group_id:
+ *                 type: integer
  *     responses:
  *       201:
  *         description: User created successfully
  *       400:
- *         description: Bad Request
+ *         description: Bad request
  *       500:
- *         description: Internal Server Error
+ *         description: Internal server error
  */
-
-// router.route('/').post(createUser);
+router.route('/').post( createUser); // POST /users mit JWT-Validierung
 
 /**
  * @swagger
  * /users/{id}:
  *   delete:
  *     summary: Delete a user by ID
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - Users
  *     parameters:
@@ -112,13 +108,15 @@ router.route('/').get(getAllUsers);
  *       500:
  *         description: Internal Server Error
  */
-// router.delete('/:id', deleteUser);
+router.delete('/:id', deleteUser); // DELETE /users/:id mit JWT-Validierung
 
 /**
  * @swagger
  * /users/{id}:
  *   put:
  *     summary: Update a user by ID
+ *     security:
+ *       - BearerAuth: []
  *     tags:
  *       - Users
  *     parameters:
@@ -156,6 +154,6 @@ router.route('/').get(getAllUsers);
  *       500:
  *         description: Internal server error
  */
-// router.put('/:id', updateUser);
+router.put('/:id', updateUser); // PUT /users/:id mit JWT-Validierung
 
 module.exports = router;
