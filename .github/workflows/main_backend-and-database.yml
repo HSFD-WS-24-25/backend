@@ -26,6 +26,9 @@ jobs:
           npm install
           npm run build --if-present
         # npm run test --if-present
+        
+      - name: Set environment variables
+        run: echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
 
       - name: Run Prisma migrations
         run: npx prisma migrate deploy
