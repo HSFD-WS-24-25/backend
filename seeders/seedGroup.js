@@ -1,6 +1,6 @@
 const prisma = require('../config/database/prisma');
 
-async function main() {
+async function seedGroup() {
   const groups = [
     {
       id: 1, 
@@ -30,15 +30,6 @@ async function main() {
       },
     });
   }
-
-  console.log('Group seeding complete!');
 }
 
-main()
-  .catch((error) => {
-    console.error('Error during group seeding:', error);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+module.exports = { seedGroup };
