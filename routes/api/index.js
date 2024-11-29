@@ -5,7 +5,7 @@ const userRoutes = require('./users');
 const checkJwt = require('../../middleware/authMiddleware');
 
 router.use('/events', eventRoutes);
-router.use('/users', userRoutes);
+router.use('/users', checkJwt, userRoutes);
 
 
 module.exports = router;

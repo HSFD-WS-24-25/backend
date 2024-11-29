@@ -41,7 +41,7 @@ const checkJwt = require('../../middleware/authMiddleware'); // JWT-Middleware i
  *                   group_id:
  *                     type: integer
  */
-router.route('/').get( getAllUsers); // GET /users mit JWT-Validierung
+router.route('/').get( checkJwt, getAllUsers); // GET /users mit JWT-Validierung
 
 /**
  * @swagger
