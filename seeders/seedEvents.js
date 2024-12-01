@@ -1,7 +1,6 @@
 const prisma = require('../config/database/prisma');
 
-async function main() {
-  console.log('Start seeding...');
+async function seedEvents() {
 
   const events = [
     {
@@ -61,14 +60,6 @@ async function main() {
       data: event,
     });
   }
-
-  console.log('Seeding completed.');
 }
 
-main()
-  .catch((e) => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+module.exports = { seedEvents };
