@@ -16,8 +16,10 @@ model User {
   last_name    String        @db.VarChar(50)
   telephone    String?       @db.VarChar(20)
   address      String?
-  group_id     Int
+  role_id      Int
+  role         Role          @relation(fields: [role_id], references: [id])
   participants Participant[]
+  group_id     Int
   group        Group         @relation(fields: [group_id], references: [id])
 
   @@map("users")
@@ -38,6 +40,7 @@ model Role {
   id          Int          @id @default(autoincrement())
   name        String       @db.VarChar(50)
   description String
+  users       User[]
   group_id    Int
   permissions Permission[]
   group       Group        @relation(fields: [group_id], references: [id])
