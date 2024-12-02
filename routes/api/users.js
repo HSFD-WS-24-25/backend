@@ -51,7 +51,7 @@ const checkPermissions = require('../../middleware/permissionMiddleware');
  *                         type: string
  */
 
-router.route('/').get(checkPermissions("getall"), getAllUsers);
+router.route('/').get(getAllUsers);
 
 /**
  * @swagger
