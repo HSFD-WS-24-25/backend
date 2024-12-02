@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getAllUsers } = require('../../controllers/userController');
-
+const logToken  = require('../../middleware/logTokenMiddleware');
+const checkPermissions = require('../../middleware/permissionsMiddleware');
 /**
  * @swagger
  * /users:
@@ -50,7 +51,7 @@ const { getAllUsers } = require('../../controllers/userController');
  *                         type: string
  */
 
-router.route('/').get(getAllUsers);
+router.route('/').get(checkPermissions("getall"), getAllUsers);
 
 /**
  * @swagger
