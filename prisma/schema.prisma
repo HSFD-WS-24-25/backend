@@ -19,21 +19,8 @@ model User {
   role_id      Int
   role         Role          @relation(fields: [role_id], references: [id])
   participants Participant[]
-  group_id     Int
-  group        Group         @relation(fields: [group_id], references: [id])
 
   @@map("users")
-}
-
-model Group {
-  id          Int    @id @default(autoincrement())
-  name        String @db.VarChar(50)
-  description String
-
-  roles Role[]
-  users User[]
-
-  @@map("groups")
 }
 
 model Role {
@@ -41,9 +28,7 @@ model Role {
   name        String       @db.VarChar(50)
   description String
   users       User[]
-  group_id    Int
   permissions Permission[]
-  group       Group        @relation(fields: [group_id], references: [id])
 
   @@map("roles")
 }
