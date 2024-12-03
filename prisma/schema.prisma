@@ -17,18 +17,33 @@ model User {
   telephone    String?       @db.VarChar(20)
   address      String?
   role_id      Int
+  organization_id Int 
   role         Role          @relation(fields: [role_id], references: [id])
   participants Participant[]
+  org Organization @relation(fields: [organization_id], references: [id])
 
   @@map("users")
+}
+
+model Organization {
+  id          Int    @id @default(autoincrement())
+  name        String @db.VarChar(50)
+  description String
+
+  roles Role[]
+  users User[]
+
+  @@map("organizations")
 }
 
 model Role {
   id          Int          @id @default(autoincrement())
   name        String       @db.VarChar(50)
   description String
+  organization_id Int
   users       User[]
   permissions Permission[]
+  org Organization @relation(fields: [organization_id], references: [id])   
 
   @@map("roles")
 }
@@ -64,6 +79,8 @@ model Event {
   capacity              Int
   reminder              Int
   max_additional_guests Int           @default(0)
+  isOnline              Boolean       @default(false) 
+  link                  String? 
   participants          Participant[]
 
   @@map("events")
