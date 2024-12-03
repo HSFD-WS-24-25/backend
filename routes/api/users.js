@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { getAllUsers } = require('../../controllers/userController');
-
+const logToken  = require('../../middleware/logTokenMiddleware');
+const checkPermissions = require('../../middleware/permissionMiddleware');
 /**
  * @swagger
  * /users:
@@ -35,8 +36,6 @@ const { getAllUsers } = require('../../controllers/userController');
  *                   address:
  *                     type: string
  *                     nullable: true
- *                   group_id:
- *                     type: integer
  *                   participants:
  *                     type: array
  *                     items:
