@@ -36,8 +36,6 @@ const checkPermissions = require('../../middleware/permissionMiddleware');
  *                   address:
  *                     type: string
  *                     nullable: true
- *                   group_id:
- *                     type: integer
  *                   participants:
  *                     type: array
  *                     items:

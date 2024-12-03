@@ -6,9 +6,6 @@ async function runSeeds() {
   try {
     console.log('Starting all seeding scripts...');
 
-    console.log('Seeding Groups...');
-    await seedGroup.seedGroup();
-
     console.log('Seeding Users...');
     await seedUsers.seedUsers();
 
