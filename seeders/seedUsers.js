@@ -10,6 +10,7 @@ async function seedUsers() {
       last_name: 'Doe',
       telephone: '1234567890',
       address: '123 Main St',
+      role_id: 3,
       group_id: 1, 
     },
     {
@@ -20,6 +21,7 @@ async function seedUsers() {
       last_name: 'Smith',
       telephone: '0987654321',
       address: '456 Elm St',
+      role_id: 3,
       group_id: 1,
     },
     {
@@ -30,7 +32,19 @@ async function seedUsers() {
       last_name: 'Jones',
       telephone: null,
       address: null,
+      role_id: 3,
       group_id: 2,
+    },
+    {
+      id: '4',
+      email: "emma.white@example.com",
+      username: "emmawhite",
+      first_name: "Emma",
+      last_name: "White",
+      telephone: "7891234560",
+      address: "321 Pine St, Star City",
+      role_id: 5, 
+      organization_id: 3, 
     },
   ];
 
@@ -46,6 +60,7 @@ async function seedUsers() {
         last_name: user.last_name,
         telephone: user.telephone,
         address: user.address,
+        role_id: user.role_id,
         group_id: user.group_id,
       },
     });
