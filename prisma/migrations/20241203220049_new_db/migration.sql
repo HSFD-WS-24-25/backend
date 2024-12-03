@@ -7,18 +7,19 @@ CREATE TABLE "users" (
     "last_name" VARCHAR(50) NOT NULL,
     "telephone" VARCHAR(20),
     "address" TEXT,
-    "group_id" INTEGER NOT NULL,
+    "role_id" INTEGER NOT NULL,
+    "organization_id" INTEGER NOT NULL,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "groups" (
+CREATE TABLE "organizations" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(50) NOT NULL,
     "description" TEXT NOT NULL,
 
-    CONSTRAINT "groups_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "organizations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -26,7 +27,7 @@ CREATE TABLE "roles" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(50) NOT NULL,
     "description" TEXT NOT NULL,
-    "group_id" INTEGER NOT NULL,
+    "organization_id" INTEGER NOT NULL,
 
     CONSTRAINT "roles_pkey" PRIMARY KEY ("id")
 );
@@ -60,6 +61,8 @@ CREATE TABLE "events" (
     "capacity" INTEGER NOT NULL,
     "reminder" INTEGER NOT NULL,
     "max_additional_guests" INTEGER NOT NULL DEFAULT 0,
+    "isOnline" BOOLEAN NOT NULL DEFAULT false,
+    "link" TEXT,
 
     CONSTRAINT "events_pkey" PRIMARY KEY ("id")
 );
@@ -67,7 +70,9 @@ CREATE TABLE "events" (
 -- CreateTable
 CREATE TABLE "_PermissionToRole" (
     "A" INTEGER NOT NULL,
-    "B" INTEGER NOT NULL
+    "B" INTEGER NOT NULL,
+
+    CONSTRAINT "_PermissionToRole_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -77,16 +82,16 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 CREATE UNIQUE INDEX "users_username_key" ON "users"("username");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_PermissionToRole_AB_unique" ON "_PermissionToRole"("A", "B");
-
--- CreateIndex
 CREATE INDEX "_PermissionToRole_B_index" ON "_PermissionToRole"("B");
 
 -- AddForeignKey
-ALTER TABLE "users" ADD CONSTRAINT "users_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "roles" ADD CONSTRAINT "roles_group_id_fkey" FOREIGN KEY ("group_id") REFERENCES "groups"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users" ADD CONSTRAINT "users_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organizations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "roles" ADD CONSTRAINT "roles_organization_id_fkey" FOREIGN KEY ("organization_id") REFERENCES "organizations"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "participants" ADD CONSTRAINT "participants_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
