@@ -30,7 +30,6 @@ model Organization {
   name        String @db.VarChar(50)
   description String
 
-  roles Role[]
   users User[]
 
   @@map("organizations")
@@ -43,7 +42,6 @@ model Role {
   organization_id Int
   users       User[]
   permissions Permission[]
-  org Organization @relation(fields: [organization_id], references: [id])   
 
   @@map("roles")
 }
