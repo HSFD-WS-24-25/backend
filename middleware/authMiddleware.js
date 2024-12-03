@@ -30,6 +30,7 @@ const saveUserToDatabase = async (req, res, next) => {
     }
 };
 
+// TODO We need to get the user data
 async function getUserData(req) {
     const decodedToken = await extractAndDecodeToken(req);
     const id = await getSub(decodedToken);
