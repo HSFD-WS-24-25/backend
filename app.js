@@ -21,7 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Define all api routes in routes/api and import them in routes/api/index.js
-app.use('/api', checkJwt, saveUserToDatabase, apiRoutes);
+app.use('/api', apiRoutes);
 
 // Add Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
