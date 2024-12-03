@@ -1,6 +1,6 @@
 const { check } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const { getSub, extractAndDecodeToken } = require('../helpers/auth0Helpers');
+const { getSub, extractAndDecodeToken } = require('../helpers/auth0Helper');
 const logToken = require('./logTokenMiddleware');
 
 
