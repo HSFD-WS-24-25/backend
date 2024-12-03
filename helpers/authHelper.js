@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 //function for extracting the token from the header 
-function extractAndDecodeToken(req) {
+async function extractAndDecodeToken(req) {
     const authHeader = req.headers.authorization;
     let decodedToken = null;
 
@@ -21,7 +21,7 @@ function extractAndDecodeToken(req) {
 
 
 // Function for getting sub from a decoded token
-function getSub(decodedToken) {
+async function getSub(decodedToken) {
     try {
         if (!decodedToken.sub) {
             throw new Error('Token contains no sub');

@@ -31,7 +31,6 @@ const options = {
             last_name: { type: "string" },
             telephone: { type: "string", nullable: true },
             address: { type: "string", nullable: true },
-            group_id: { type: "integer" },
           },
           required: ["email", "username", "first_name", "last_name", "group_id"],
         },
