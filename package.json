@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "seed": "node seeders/runSeeds.js",
-    "postinstall": "npx prisma generate && npx prisma migrate deploy"
+    "seed": "node seeders/runSeeds.js"
   },
   "keywords": [],
   "author": "",
