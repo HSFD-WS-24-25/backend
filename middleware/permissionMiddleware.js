@@ -1,36 +1,51 @@
-const { check } = require('express-validator');
-const jwt = require('jsonwebtoken');
 const { getSub, extractAndDecodeToken } = require('../helpers/authHelper');
-const logToken = require('./logTokenMiddleware');
+const prisma = require('../config/database/prisma');
+const { UNAUTHORIZED, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../config/statusCodes');
+const { STATUS } = require('../config/messages');
+const { PERMISSIONS } = require('../config/permissions');
+const { isValidPermission } = require('../utils');
 
+const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
+    return async (req, res, next) => {
+        if (!isValidPermission(requiredPermission)) {
+            return res.status(INTERNAL_SERVER_ERROR).json({ message: 'No valid permission found' });
+        }
+        try {
+            const userId = await getSub(await extractAndDecodeToken(req));
+            if (!userId) {
+                return res.status(UNAUTHORIZED).json({ message: STATUS.UNAUTHORIZED });
+            }
 
-// this function will examine the token, extract the sub and check if the user has the required permissions to perform the given function
-const checkPermissions = () => {
-    return (req, res, next) => {
-    // let permission = requestedFunction;
-    let permission = 'getall';
-    let isPermitted = false;
-    //for debugging purposes     
-    console.log('checking for user permission to perform:', permission);
-    
-    // extract and decode the token
-    const decodedToken = extractAndDecodeToken(req);
-    // extract the sub 
-    const userId = getSub(decodedToken);
+            const user = await prisma.user.findUnique({
+                where: { id: userId },
+                include: {
+                    role: {
+                        include: {
+                            permissions: true,
+                        },
+                    },
+                },
+            });
 
-    // TODO check if the user has the required permission (impliment once the database is sorted)
-    // if the user has the required permission set isPermitted to true and continue else return a message to the user
-    //quiry permissions for userId against list of permissions required to perfiorm this function 
+            if (! user) {
+                return res.status(NOT_FOUND).json({ message: 'User not found' });
+            }
 
+            if (! user.role?.permissions) {
+                return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
+            }
 
-    if (isPermitted) {
-        console.log('User has permission to perform:', permission);
-        next();
-    } else {
-        console.log('User does not have permission to perform:', permission);
-        next();
-    }
+            const userPermissions = user.role.permissions.map(permission => permission.id);
+            if (! userPermissions.includes(requiredPermission.id)) {
+                return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
+            }
+
+            return next();
+        } catch (error) {
+            console.error('Error checking permissions:', error);
+            return res.status(INTERNAL_SERVER_ERROR).json({ message: STATUS.INTERNAL_SERVER_ERROR });
+        }
     };
-};
+}
 
-module.exports = checkPermissions;
+module.exports = checkPermission;
