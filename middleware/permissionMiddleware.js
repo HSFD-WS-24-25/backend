@@ -1,4 +1,4 @@
-const { getSub, extractAndDecodeToken } = require('../helpers/authHelper');
+const { getSub } = require('../helpers/authHelper');
 const prisma = require('../config/database/prisma');
 const { UNAUTHORIZED, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../config/statusCodes');
 const { STATUS } = require('../config/messages');
@@ -11,7 +11,7 @@ const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
             return res.status(INTERNAL_SERVER_ERROR).json({ message: 'No valid permission found' });
         }
         try {
-            const userId = await getSub(await extractAndDecodeToken(req));
+            const userId = await getSub(req);
             if (!userId) {
                 return res.status(UNAUTHORIZED).json({ message: STATUS.UNAUTHORIZED });
             }
