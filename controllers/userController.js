@@ -1,4 +1,5 @@
 const prisma = require('../config/database/prisma');
+const { ROLES } = require('../config/roles');
 
 const getAllUsers = async (req, res) => {
     try {
@@ -17,6 +18,7 @@ const createUser = async (sub = null) => {
         await prisma.user.create({
             data: {
                 sub: sub,
+                role_id: ROLES.GUEST.id,
             },
         });
     } catch (error) {

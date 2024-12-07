@@ -14,6 +14,7 @@ const checkUserInDatabase = async (req, res, next) => {
         return next();
     }
     await createUser(sub);
+    console.log('User created in the database');
     next();
 };
 
