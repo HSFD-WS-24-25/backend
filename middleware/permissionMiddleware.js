@@ -1,6 +1,5 @@
-const { getSub } = require('../helpers/authHelper');
 const prisma = require('../config/database/prisma');
-const { UNAUTHORIZED, FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../config/statusCodes');
+const { FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../config/statusCodes');
 const { STATUS } = require('../config/messages');
 const { PERMISSIONS } = require('../config/permissions');
 const { isValidPermission } = require('../utils');
@@ -11,32 +10,27 @@ const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
             return res.status(INTERNAL_SERVER_ERROR).json({ message: 'No valid permission found' });
         }
         try {
-            const userId = await getSub(req);
-            if (!userId) {
-                return res.status(UNAUTHORIZED).json({ message: STATUS.UNAUTHORIZED });
-            }
-
-            const user = await prisma.user.findUnique({
-                where: { id: userId },
-                include: {
-                    role: {
-                        include: {
-                            permissions: true,
-                        },
-                    },
-                },
-            });
-
-            if (! user) {
+            const user = req.user;
+            console.log('User from permission:', user);
+            if (!user) {
                 return res.status(NOT_FOUND).json({ message: 'User not found' });
             }
 
-            if (! user.role?.permissions) {
+            const role = await prisma.role.findUnique({
+                where: { id: user.role_id },
+                include: {
+                    permissions: true,
+                },
+            });
+            console.log('Role: ', role);
+
+            if (!role?.permissions) {
                 return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
             }
 
-            const userPermissions = user.role.permissions.map(permission => permission.id);
-            if (! userPermissions.includes(requiredPermission.id)) {
+            const userPermissions = role.permissions.map(permission => permission.id);
+            console.log('User permissions:', userPermissions);
+            if (!userPermissions.includes(requiredPermission.id)) {
                 return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
             }
 
