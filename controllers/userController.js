@@ -10,36 +10,39 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-const createUser = async (sub = null) => {
+const createAndGetUser = async (sub = null) => {
     if (!sub) {
         console.error('No sub provided to createUser');
+        return null;
     }
     try {
-        await prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 sub: sub,
                 role_id: ROLES.GUEST.id,
             },
         });
+        console.log('User created:', user);
+        return user;
     } catch (error) {
         console.error('Error saving user to database:', error);
     }
+    return null;
 }
 
-const doesUserExist = async (sub = null) => {
+const getUser = async (sub = null) => {
     if (!sub) {
         console.error('No sub provided to doesUserExist');
-        return false;
+        return null;
     }
     try {
-        const countUserExists = await prisma.user.count({
+        return await prisma.user.findUnique({
             where: { sub },
         });
-        return countUserExists > 0;
     } catch (error) {
         console.error('Error checking if user exists:', error);
-        return false;
     }
+    return null;
 }
 
-module.exports = { getAllUsers, createUser, doesUserExist };
+module.exports = { getAllUsers, createAndGetUser, getUser };

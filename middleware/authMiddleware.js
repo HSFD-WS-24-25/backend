@@ -1,6 +1,8 @@
 const { auth } = require('express-oauth2-jwt-bearer');
 const { getSub } = require('../helpers/authHelper');
-const { createUser, doesUserExist } = require('../controllers/userController');
+const { createAndGetUser, getUser } = require('../controllers/userController');
+const { STATUS } = require('../config/messages');
+const { INTERNAL_SERVER_ERROR } = require('../config/statusCodes');
 
 const checkJwt = auth({
     audience: process.env.AUTH0_AUDIENCE,
@@ -8,14 +10,20 @@ const checkJwt = auth({
 });
 
 const checkUserInDatabase = async (req, res, next) => {
-    const sub = await getSub(req);
-    if (await doesUserExist(sub)) {
-        console.log('User exists in the database');
-        return next();
+    try {
+        const sub = await getSub(req);
+        let user = await getUser(sub) || await createAndGetUser(sub)
+
+        if (!user) {
+            return res.status(INTERNAL_SERVER_ERROR).json({ error: STATUS.INTERNAL_SERVER_ERROR });
+        }
+        req.user = user;
+        console.log('User:', req.user);
+        next();
+    } catch (error) {
+        console.error('Error checking user in database:', error);
+        return res.status(INTERNAL_SERVER_ERROR).json({ error: STATUS.INTERNAL_SERVER_ERROR });
     }
-    await createUser(sub);
-    console.log('User created in the database');
-    next();
 };
 
 module.exports = { checkJwt, checkUserInDatabase };
