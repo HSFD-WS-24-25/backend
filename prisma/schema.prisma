@@ -9,16 +9,16 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  sub          String        @unique
-  email        String?       @unique
-  username     String?       @unique @db.VarChar(50)
-  first_name   String?       @db.VarChar(50)
-  last_name    String?       @db.VarChar(50)
+  id           String        @id
+  sub          String        @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String        @unique
+  username     String        @unique @db.VarChar(50)
+  first_name   String        @db.VarChar(50)
+  last_name    String        @db.VarChar(50)
   telephone    String?       @db.VarChar(20)
   address      String?
-  role_id      Int?
-  role         Role?         @relation(fields: [role_id], references: [id])
+  role_id      Int
+  role         Role          @relation(fields: [role_id], references: [id])
   participants Participant[]
 
   @@map("users")
