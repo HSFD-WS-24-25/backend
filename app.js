@@ -6,7 +6,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpecs = require('./config/swagger');
 const apiRoutes = require('./routes/api/index');
 const { PORT } = require('./config/constants');
-const { checkJwt, saveUserToDatabase } = require('./middleware/authMiddleware');
+const { checkJwt, checkUserInDatabase } = require('./middleware/authMiddleware');
 const port = process.env.PORT || PORT;
 
 // Enable CORS only for the client URL specified in environment variables
@@ -21,7 +21,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Define all api routes in routes/api and import them in routes/api/index.js
-app.use('/api', checkJwt, saveUserToDatabase, apiRoutes);
+app.use('/api', checkJwt, checkUserInDatabase, apiRoutes);
 
 // Add Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
