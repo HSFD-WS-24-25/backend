@@ -23,24 +23,62 @@ const options = {
     ],
     components: {
       schemas: {
+        Role: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer' },
+            name: { type: 'string' },
+            description: { type: 'string' },
+            users: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/User' },
+            },
+            permissions: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Permission' },
+            },
+          },
+          required: ['id', 'name', 'description'],
+        },
+        Permission: {
+          type: 'object',
+          properties: {
+            id: { type: 'integer' },
+            name: { type: 'string' },
+            roles: {
+              type: 'array',
+              items: { $ref: '#/components/schemas/Role' },
+            },
+          },
+          required: ['id', 'name'],
+        },
+        Participant: {
+          type: 'object',
+          properties: {
+            event_id: { type: 'integer' },
+            user_id: { type: 'string', format: 'uuid' },
+            status: { type: 'string', nullable: true },
+            additional_guest: { type: 'integer', default: 0 },
+            user: { $ref: '#/components/schemas/User' },
+            event: { $ref: '#/components/schemas/Event' },
+          },
+          required: ['event_id', 'user_id'],
+        },
         User: {
           type: "object",
           properties: {
-            id: { type: "string" },
-            email: { type: "string", format: "email" },
-            username: { type: "string" },
-            first_name: { type: "string" },
-            last_name: { type: "string" },
+            id: { type: "string", format: 'uuid' },
+            sub: { type: 'string' },
+            email: { type: "string", format: "email", nullable: true },
+            username: { type: "string", nullable: true },
+            first_name: { type: "string", nullable: true },
+            last_name: { type: "string", nullable: true },
             telephone: { type: "string", nullable: true },
             address: { type: "string", nullable: true },
+            role_id: { type: 'integer' },
+            role: { $ref: '#/components/schemas/Role' },
           },
-          required: [
-            "email",
-            "username",
-            "first_name",
-            "last_name",
-            "group_id"
-          ],
+          required: ['id', 'sub', 'role_id'],
         },
         Event: {
           type: "object",
@@ -53,7 +91,11 @@ const options = {
             location: { type: "string" },
             capacity: { type: "integer" },
             reminder: { type: "integer" },
-            max_additional_guests: { type: "integer" },
+            max_additional_guests: { type: "integer", default: 0 },
+            participants: {
+              type: "array",
+              items: { $ref: '#/components/schemas/Participant' },
+            },
           },
           required: [
             "name",
