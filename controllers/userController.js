@@ -16,10 +16,14 @@ const createAndGetUser = async (sub = null) => {
         return null;
     }
     try {
+        const usersCount = await prisma.user.count();
+        // If there are no users, the first user to sign in will be an admin, others will be guests
+        const roleId = (0 === usersCount) ? ROLES.ADMIN_INSTANCE : ROLES.GUEST.id;
+
         const user = await prisma.user.create({
             data: {
                 sub: sub,
-                role_id: ROLES.GUEST.id,
+                role_id: roleId,
             },
         });
         console.log('User created:', user);
@@ -32,7 +36,7 @@ const createAndGetUser = async (sub = null) => {
 
 const getUser = async (sub = null) => {
     if (!sub) {
-        console.error('No sub provided to doesUserExist');
+        console.error('No sub provided to get user');
         return null;
     }
     try {
