@@ -1,4 +1,6 @@
+require('dotenv').config(); 
 const swaggerJsdoc = require('swagger-jsdoc');
+const appUrl = process.env.APP_URL ? `${process.env.APP_URL}/api` : 'http://localhost:3001/api';
 
 // https://editor.swagger.io/
 const options = {
@@ -16,7 +18,7 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3001/api', // Replace with server URL
+        url: appUrl,
       },
     ],
     components: {
@@ -32,7 +34,13 @@ const options = {
             telephone: { type: "string", nullable: true },
             address: { type: "string", nullable: true },
           },
-          required: ["email", "username", "first_name", "last_name", "group_id"],
+          required: [
+            "email",
+            "username",
+            "first_name",
+            "last_name",
+            "group_id"
+          ],
         },
         Event: {
           type: "object",
