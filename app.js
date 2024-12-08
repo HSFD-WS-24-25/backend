@@ -3,7 +3,7 @@ const app = express();
 require('dotenv').config();
 const cors = require('cors');
 const swaggerUi = require('swagger-ui-express');
-const swaggerSpecs = require('./config/swagger');
+const swaggerSpecs = require('./swagger/swagger');
 const apiRoutes = require('./routes/api/index');
 const { PORT } = require('./config/constants');
 const { checkJwt, checkUserInDatabase } = require('./middleware/authMiddleware');
