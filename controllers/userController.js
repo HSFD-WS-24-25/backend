@@ -1,15 +1,16 @@
 const prisma = require('../config/database/prisma');
 const { ROLES } = require('../config/roles');
 
+// HTTP response methods
 const getAllUsers = async (req, res) => {
     try {
-        const users = await prisma.user.findMany();
-        res.json(require('../models/users.json'));
+        res.json(await prisma.user.findMany());
     } catch (error) {
         res.status(500).json({ error: 'Something went wrong' });
     }
 };
 
+// Local methods
 const createAndGetUser = async (sub = null) => {
     if (!sub) {
         console.error('No sub provided to createUser');
