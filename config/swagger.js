@@ -110,8 +110,174 @@ const options = {
       },
     },
   },
-  apis: ['./routes/api/*.js', './controllers/*.js'],
+  apis: ['./swagger.js'],
 };
 
 const specs = swaggerJsdoc(options);
 module.exports = specs;
+
+// Swagger API Samples
+// https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
+
+/**
+ * @swagger
+ * /events:
+ *   post:
+ *     summary: Create a new event
+ *     tags:
+ *       - Events
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               date_start:
+ *                 type: string
+ *                 format: date-time
+ *               date_end:
+ *                 type: string
+ *                 format: date-time
+ *               location:
+ *                 type: string
+ *               capacity:
+ *                 type: integer
+ *               reminder:
+ *                 type: integer
+ *               max_additional_guests:
+ *                 type: integer
+ *                 default: 0
+ *     responses:
+ *       201:
+ *         description: Event created successfully
+ *       400:
+ *         description: Bad Request
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /events:
+ *   get:
+ *     summary: Retrieve a list of events
+ *     tags:
+ *       - Events
+ *     responses:
+ *       200:
+ *         description: A list of events
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Event'
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /events/{id}:
+ *   get:
+ *     summary: Retrieve a single event by ID
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the event to retrieve
+ *     responses:
+ *       200:
+ *         description: Event details retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /events/{id}:
+ *   put:
+ *     summary: Update an existing event by ID
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the event to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               date_start:
+ *                 type: string
+ *                 format: date-time
+ *               date_end:
+ *                 type: string
+ *                 format: date-time
+ *               location:
+ *                 type: string
+ *               capacity:
+ *                 type: integer
+ *               reminder:
+ *                 type: integer
+ *               max_additional_guests:
+ *                 type: integer
+ *                 default: 0
+ *     responses:
+ *       200:
+ *         description: Event updated successfully
+ *       400:
+ *         description: Bad Request
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal Server Error
+ */
+
+/**
+ * @swagger
+ * /events/{id}:
+ *   delete:
+ *     summary: Delete an event by ID
+ *     tags:
+ *       - Events
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the event to delete
+ *     responses:
+ *       200:
+ *         description: Event deleted successfully
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Internal Server Error
+ */
