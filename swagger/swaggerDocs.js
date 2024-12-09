@@ -1,5 +1,52 @@
 // Swagger API Samples
 // https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
+const rolePaths = {
+  '/roles': {
+    get: {
+      summary: 'Retrieve a list of all roles',
+      tags: ['Roles'],
+      security: [{ Auth0: [] }],
+      responses: {
+        200: {
+          description: 'A list of roles retrieved successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/Role' },
+              },
+            },
+          },
+        },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+};
+
+const permissionPaths = {
+  '/permissions': {
+    get: {
+      summary: 'Retrieve a list of all permissions',
+      tags: ['Permissions'],
+      security: [{ Auth0: [] }],
+      responses: {
+        200: {
+          description: 'A list of permissions retrieved successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: { $ref: '#/components/schemas/Permission' },
+              },
+            },
+          },
+        },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+};
 
 const userPaths = {
   '/users': {
@@ -263,5 +310,7 @@ const eventPaths = {
     paths: {
       ...eventPaths,
       ...userPaths,
+      ...rolePaths,
+      ...permissionPaths,
     },
   };
