@@ -9,11 +9,12 @@ datasource db {
 }
 
 model User {
-  id           String        @id
-  email        String        @unique
-  username     String        @unique @db.VarChar(50)
-  first_name   String        @db.VarChar(50)
-  last_name    String        @db.VarChar(50)
+  id           String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sub          String        @unique
+  email        String?       @unique
+  username     String?       @unique @db.VarChar(50)
+  first_name   String?       @db.VarChar(50)
+  last_name    String?       @db.VarChar(50)
   telephone    String?       @db.VarChar(20)
   address      String?
   role_id      Int
@@ -43,7 +44,7 @@ model Permission {
 
 model Participant {
   event_id         Int
-  user_id          String
+  user_id          String  @db.Uuid
   status           String?
   additional_guest Int     @default(0)
 

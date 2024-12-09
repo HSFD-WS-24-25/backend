@@ -21,7 +21,8 @@ async function extractAndDecodeToken(req) {
 
 
 // Function for getting sub from a decoded token
-async function getSub(decodedToken) {
+async function getSub(req) {
+    const decodedToken = await extractAndDecodeToken(req);
     try {
         if (!decodedToken.sub) {
             throw new Error('Token contains no sub');

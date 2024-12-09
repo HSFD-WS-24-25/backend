@@ -1,52 +1,29 @@
 const { auth } = require('express-oauth2-jwt-bearer');
-const { extractAndDecodeToken, getSub, getName, getEmail } = require('../helpers/authHelper');
-const prisma = require('../config/database/prisma');
+const { getSub } = require('../helpers/authHelper');
+const { createAndGetUser, getUser } = require('../controllers/userController');
+const { STATUS } = require('../config/messages');
+const { INTERNAL_SERVER_ERROR } = require('../config/statusCodes');
 
 const checkJwt = auth({
     audience: process.env.AUTH0_AUDIENCE,
     issuerBaseURL: process.env.AUTH0_ISSUER_BASE_URL,
 });
 
-const saveUserToDatabase = async (req, res, next) => {
-    console.log('Saving user to database');
-    const user = await getUserData(req);
+const checkUserInDatabase = async (req, res, next) => {
     try {
-        const existingUser = await prisma.user.findUnique({
-            where: { id: user.id },
-        });
+        const sub = await getSub(req);
+        let user = await getUser(sub) || await createAndGetUser(sub)
 
-        if (existingUser) {
-            console.log('User already exists in the database');
-            return next();
+        if (!user) {
+            return res.status(INTERNAL_SERVER_ERROR).json({ error: STATUS.INTERNAL_SERVER_ERROR });
         }
-
-        await prisma.user.create({
-            data: user,
-        });
+        req.user = user;
+        console.log('User:', req.user);
         next();
     } catch (error) {
-        console.error('Error saving user to database:', error);
-        return res.status(500).json({ error: 'Something went wrong' });
+        console.error('Error checking user in database:', error);
+        return res.status(INTERNAL_SERVER_ERROR).json({ error: STATUS.INTERNAL_SERVER_ERROR });
     }
 };
 
-// TODO We need to get the user data
-async function getUserData(req) {
-    const decodedToken = await extractAndDecodeToken(req);
-    const id = await getSub(decodedToken);
-    const username = 'johnsnow1234ffgdsf';
-    const first_name = 'John';
-    const last_name = 'Snow';
-    const email = 'john@snow.com2ff';
-    const role_id = 1;
-    return {
-        id,
-        username,
-        first_name,
-        last_name,
-        email,
-        role_id,
-    };
-}
-
-module.exports = { checkJwt, saveUserToDatabase };
+module.exports = { checkJwt, checkUserInDatabase };
