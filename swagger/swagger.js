@@ -23,6 +23,14 @@ const options = {
       },
     ],
     components: {
+      securitySchemes: {
+        Auth0: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+          description: 'Enter your Auth0 token to authorize requests.',
+        },
+      },
       schemas: {
         Role: {
           type: 'object',

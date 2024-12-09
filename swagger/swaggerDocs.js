@@ -6,6 +6,11 @@ const eventPaths = {
       post: {
         summary: 'Create a new event',
         tags: ['Events'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
         requestBody: {
           required: true,
           content: {
@@ -35,6 +40,11 @@ const eventPaths = {
       get: {
         summary: 'Retrieve a list of events',
         tags: ['Events'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
         responses: {
           200: {
             description: 'A list of events',
@@ -55,6 +65,11 @@ const eventPaths = {
       get: {
         summary: 'Retrieve a single event by ID',
         tags: ['Events'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
         parameters: [
           {
             in: 'path',
@@ -73,6 +88,11 @@ const eventPaths = {
       put: {
         summary: 'Update an existing event by ID',
         tags: ['Events'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
         parameters: [
           {
             in: 'path',
@@ -112,6 +132,11 @@ const eventPaths = {
       delete: {
         summary: 'Delete an event by ID',
         tags: ['Events'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
         parameters: [
           {
             in: 'path',
