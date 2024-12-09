@@ -1,6 +1,110 @@
 // Swagger API Samples
 // https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#schema-object
 
+const userPaths = {
+  '/users': {
+    get: {
+      summary: 'Retrieve a list of all users',
+      tags: ['Users'],
+      security: [
+        {
+          Auth0: [],
+        },
+      ],
+      responses: {
+        200: {
+          description: 'A list of users retrieved successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'integer' },
+                    sub: { type: 'string' },
+                    role_id: { type: 'string' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+  '/users/create': {
+    post: {
+      summary: 'Create a new user',
+      tags: ['Users'],
+      security: [
+        {
+          Auth0: [],
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                sub: { type: 'string', description: 'The user subject identifier' },
+              },
+              required: ['sub'],
+            },
+          },
+        },
+      },
+      responses: {
+        201: { description: 'User created successfully' },
+        400: { description: 'Bad Request' },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+  '/users/{sub}': {
+    get: {
+      summary: 'Retrieve a user by subject identifier (sub)',
+      tags: ['Users'],
+      security: [
+        {
+          Auth0: [],
+        },
+      ],
+      parameters: [
+        {
+          in: 'path',
+          name: 'sub',
+          required: true,
+          schema: { type: 'string' },
+          description: 'The subject identifier (sub) of the user to retrieve',
+        },
+      ],
+      responses: {
+        200: {
+          description: 'User details retrieved successfully',
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                properties: {
+                  id: { type: 'integer' },
+                  sub: { type: 'string' },
+                  role_id: { type: 'string' },
+                },
+              },
+            },
+          },
+        },
+        404: { description: 'User not found' },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+};
+
 const eventPaths = {
     '/events': {
       post: {
@@ -158,5 +262,6 @@ const eventPaths = {
   module.exports = {
     paths: {
       ...eventPaths,
+      ...userPaths,
     },
   };
