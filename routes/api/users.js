@@ -4,7 +4,7 @@ const {  getAllUsers, createAndGetUser, getUser  } = require('../../controllers/
 const logToken  = require('../../middleware/logTokenMiddleware');
 const checkPermissions = require('../../middleware/permissionMiddleware');
 
-router.route('/').get(getAllUsers);
+router.get('/', checkPermission(PERMISSIONS.VIEW_ALL_EVENTS), getAllUsers);
 // router.route('/create').post(logToken, createAndGetUser);
 // router.route('/check').get(logToken, getUser);
 

@@ -1,7 +1,6 @@
 const prisma = require('../config/database/prisma');
 const { FORBIDDEN, INTERNAL_SERVER_ERROR, NOT_FOUND } = require('../config/statusCodes');
 const { STATUS } = require('../config/messages');
-const { PERMISSIONS } = require('../config/permissions');
 const { isValidPermission } = require('../utils');
 
 const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
@@ -27,10 +26,13 @@ const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
             if (!role?.permissions) {
                 return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
             }
-
-            const userPermissions = role.permissions.map(permission => permission.id);
+            
+            // Check if the role's permissions array includes the required permission
+            const userPermissions = role.permissions.some(
+                (permission) => permission.id === requiredPermission.id
+            );
             console.log('User permissions:', userPermissions);
-            if (!userPermissions.includes(requiredPermission.id)) {
+            if (!userPermissions) {
                 return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
             }
 

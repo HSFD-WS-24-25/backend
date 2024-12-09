@@ -7,10 +7,10 @@ const handleValidationErrors = require('../../middleware/validationMiddleware');
 const checkPermission = require('../../middleware/permissionMiddleware');
 const { PERMISSIONS } = require('../../config/permissions');
 
-router.post('/', validateEvent, handleValidationErrors, createEvent);
-router.get('/', checkPermission(PERMISSIONS.VIEW_ALL), getAllEvents);
-router.get('/:id', getEventById);
-router.put('/:id', updateEvent);
-router.delete('/:id', deleteEvent);
+router.post('/', checkPermission(PERMISSIONS.CREATE_EVENT), validateEvent, handleValidationErrors, createEvent);
+router.get('/', checkPermission(PERMISSIONS.VIEW_ALL_EVENTS), getAllEvents);
+router.get('/:id', checkPermission(PERMISSIONS.VIEW_CREATED_EVENTS), getEventById);
+router.put('/:id', checkPermission(PERMISSIONS.EDIT_EVENT), validateEvent, updateEvent);
+router.delete('/:id', checkPermission(PERMISSIONS.DELETE_EVENT), deleteEvent);
 
 module.exports = router;
