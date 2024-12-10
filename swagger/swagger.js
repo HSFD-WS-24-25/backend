@@ -1,5 +1,6 @@
 require('dotenv').config(); 
 const swaggerJsdoc = require('swagger-jsdoc');
+const docs = require('./swaggerDocs');
 const appUrl = process.env.APP_URL ? `${process.env.APP_URL}/api` : 'http://localhost:3001/api';
 
 // https://editor.swagger.io/
@@ -118,6 +119,7 @@ const options = {
       },
     },
     paths: {
+      ...docs.paths,
     },
   },
   apis: [],
