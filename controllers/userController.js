@@ -19,7 +19,7 @@ const createAndGetUser = async (sub = null) => {
     try {
         const usersCount = await prisma.user.count();
         // If there are no users, the first user to sign in will be an admin, others will be guests
-        const roleId = (0 === usersCount) ? ROLES.ADMIN_INSTANCE : ROLES.GUEST.id;
+        const roleId = (0 === usersCount) ? ROLES.ADMIN_INSTANCE.id : ROLES.GUEST.id;
 
         const user = await prisma.user.create({
             data: {
