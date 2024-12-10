@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "rols": "node seeders/seedRoleAndPermissions.js",
+    "role": "node seeders/seedRoleAndPermissions.js",
     "seed": "node seeders/runSeeds.js",
     "nuke": "node seeders/nukeDB.js"
   },
