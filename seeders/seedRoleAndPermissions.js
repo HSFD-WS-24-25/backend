@@ -53,8 +53,7 @@ const roles = [
     },
 ];
 
-async function main() {
-    console.log('Seeding permissions...');
+async function seedRolesWithPermissions() {
 
     // Seed Permissions
     for (const key in PERMISSIONS) {
@@ -68,10 +67,6 @@ async function main() {
             },
         });
     }
-
-    console.log('Permissions seeded successfully.');
-
-    console.log('Seeding roles with permissions...');
 
     // Seed Roles with Permissions
     for (const role of roles) {
@@ -92,7 +87,7 @@ async function main() {
     console.log('Roles with permissions seeded successfully.');
 }
 
-main()
+seedRolesWithPermissions()
     .catch((e) => {
         console.error('Error seeding data:', e);
         process.exit(1);
@@ -100,3 +95,5 @@ main()
     .finally(async () => {
         await prisma.$disconnect();
     });
+
+module.exports = { seedRolesWithPermissions };

@@ -1,15 +1,15 @@
 const seedEvents = require('./seedEvents');
-const seedGroup = require('./seedGroup');
+const seedGroup = require('./seedRoleAndPermissions');
 const seedUsers = require('./seedUsers');
 
 async function runSeeds() {
   try {
     console.log('Starting all seeding scripts...');
 
-    console.log('Seeding Users...');
+    await seedGroup.seedRolesWithPermissions();
+
     await seedUsers.seedUsers();
 
-    console.log('Seeding Events...');
     await seedEvents.seedEvents();
 
     console.log('All seeding completed successfully!');
