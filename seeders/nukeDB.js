@@ -1,0 +1,35 @@
+const prisma = require('../config/database/prisma');
+
+async function deleteAllData() {
+    try {
+        console.log('Deleting all data...');
+
+        // 1. Delete entries in the many-to-many join table
+        await prisma.$executeRaw`DELETE FROM "_PermissionToRole";`;
+        console.log('All entries in _PermissionToRole deleted.');
+
+        // 2. Delete all events
+        await prisma.event.deleteMany({});
+        console.log('All events deleted.');
+
+        // 3. Delete all users (to avoid foreign key constraints with roles)
+        await prisma.user.deleteMany({});
+        console.log('All users deleted.');
+
+        // 4. Delete all roles
+        await prisma.role.deleteMany({});
+        console.log('All roles deleted.');
+
+        // 5. Delete all permissions
+        await prisma.permission.deleteMany({});
+        console.log('All permissions deleted.');
+
+        console.log('All data has been deleted successfully.');
+    } catch (error) {
+        console.error('Error deleting data:', error);
+    } finally {
+        await prisma.$disconnect();
+    }
+}
+
+deleteAllData();
