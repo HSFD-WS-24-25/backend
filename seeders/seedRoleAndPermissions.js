@@ -16,6 +16,7 @@ const roles = [
             PERMISSIONS.INVITE_USER,
             PERMISSIONS.VIEW_ALL_EVENTS,
             PERMISSIONS.VIEW_ALL_USERS,
+            PERMISSIONS.VIEW_ALL_ORGANIZATION,
         ],
     },
     {
