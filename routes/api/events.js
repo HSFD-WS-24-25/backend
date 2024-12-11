@@ -9,7 +9,7 @@ const { PERMISSIONS } = require('../../config/permissions');
 
 router.post('/', checkPermission(PERMISSIONS.CREATE_EVENT), validateEvent, handleValidationErrors, createEvent);
 router.get('/', checkPermission(PERMISSIONS.VIEW_ALL_EVENTS), getAllEvents);
-router.get('/:id', checkPermission(PERMISSIONS.VIEW_ALL_EVENTS, PERMISSIONS.VIEW_CREATED_EVENTS, PERMISSIONS.VIEW_INVITED_EVENTS), getEventById);
+router.get('/:id', checkPermission([PERMISSIONS.VIEW_CREATED_EVENTS, PERMISSIONS.VIEW_ALL_EVENTS, PERMISSIONS.VIEW_INVITED_EVENTS]), getEventById);
 router.put('/:id', checkPermission(PERMISSIONS.EDIT_EVENT), validateEvent, updateEvent);
 router.delete('/:id', checkPermission(PERMISSIONS.DELETE_EVENT), deleteEvent);
 
