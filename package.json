@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "seed": "node seeders/runSeeds.js"
+    "role": "node seeders/seedRoleAndPermissions.js",
+    "seed": "node seeders/runSeeds.js",
+    "nuke": "node seeders/nukeDB.js"
   },
   "keywords": [],
   "author": "",

@@ -1,55 +1,59 @@
 const prisma = require('../config/database/prisma');
 
 async function seedUsers() {
+  
   const users = [
     {
-      id: '1', 
-      email: 'john.doe@example.com',
-      username: 'johndoe',
-      first_name: 'John',
-      last_name: 'Doe',
-      telephone: '1234567890',
-      address: '123 Main St',
-      group_id: 1, 
+        sub: 'auth0|1234567890',
+        email: 'johndoe@example.com',
+        username: 'johndoe',
+        first_name: 'John',
+        last_name: 'Doe',
+        telephone: '123-456-7890',
+        address: '123 Main St, Springfield',
+        role_id: 1, // Assuming 1 corresponds to 'admin_instance' role
     },
     {
-      id: '2',
-      email: 'jane.smith@example.com',
-      username: 'janesmith',
-      first_name: 'Jane',
-      last_name: 'Smith',
-      telephone: '0987654321',
-      address: '456 Elm St',
-      group_id: 1,
+        sub: 'auth0|0987654321',
+        email: 'janedoe@example.com',
+        username: 'janedoe',
+        first_name: 'Jane',
+        last_name: 'Doe',
+        telephone: '987-654-3210',
+        address: '456 Elm St, Metropolis',
+        role_id: 2, 
     },
     {
-      id: '3',
-      email: 'alex.jones@example.com',
-      username: 'alexjones',
-      first_name: 'Alex',
-      last_name: 'Jones',
-      telephone: null,
-      address: null,
-      group_id: 2,
+        sub: 'auth0|1122334455',
+        email: 'bobsmith@example.com',
+        username: 'bobsmith',
+        first_name: 'Bob',
+        last_name: 'Smith',
+        telephone: '555-123-4567',
+        address: '789 Oak St, Gotham',
+        role_id: 3, // Assuming 3 corresponds to 'organizer' role
     },
-  ];
+    {
+        sub: 'auth0|5544332211',
+        email: 'alicesmith@example.com',
+        username: 'alicesmith',
+        first_name: 'Alice',
+        last_name: 'Smith',
+        telephone: '444-321-7890',
+        address: '101 Pine St, Star City',
+        role_id: 4, // Assuming 4 corresponds to 'guest' role
+    },
+];
 
   for (const user of users) {
-    await prisma.user.upsert({
-      where: { email: user.email }, // Ensures no duplicate email
-      update: {}, // Do not update anything if the record exists
-      create: {
-        id: user.id,
-        email: user.email,
-        username: user.username,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        telephone: user.telephone,
-        address: user.address,
-        group_id: user.group_id,
-      },
-    });
+      await prisma.user.upsert({
+          where: { sub: user.sub },
+          update: {},
+          create: user,
+      });
   }
+
+  console.log('Users seeded successfully!');
 }
 
 module.exports = { seedUsers };	

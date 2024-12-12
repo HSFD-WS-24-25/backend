@@ -4,14 +4,25 @@ const { STATUS } = require('../config/messages');
 const { PERMISSIONS } = require('../config/permissions');
 const { isValidPermission } = require('../utils');
 
-const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
+const checkPermission = (requiredPermissions = PERMISSIONS.DEFAULT) => {
     return async (req, res, next) => {
-        if (!isValidPermission(requiredPermission)) {
-            return res.status(INTERNAL_SERVER_ERROR).json({ message: 'No valid permission found' });
+
+        // Ensure requiredPermissions is always an array
+        if (!Array.isArray(requiredPermissions)) {
+            requiredPermissions = [requiredPermissions];
         }
+
+        // Validate each permission in the array
+        const invalidPermissions = requiredPermissions.filter(permission => !isValidPermission(permission));
+        console.log('Invalid permissions:', invalidPermissions);
+        if (invalidPermissions.length > 0) {
+            return res.status(INTERNAL_SERVER_ERROR).json({ message: 'No valid permissions found' });
+        }
+
         try {
             const user = req.user;
             console.log('User from permission:', user);
+
             if (!user) {
                 return res.status(NOT_FOUND).json({ message: 'User not found' });
             }
@@ -30,7 +41,13 @@ const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
 
             const userPermissions = role.permissions.map(permission => permission.id);
             console.log('User permissions:', userPermissions);
-            if (!userPermissions.includes(requiredPermission.id)) {
+
+            // Check if any of the requiredPermissions are in the user's permissions
+            const hasRequiredPermission = requiredPermissions.some(requiredPermission =>
+                userPermissions.includes(requiredPermission.id)
+            );
+
+            if (!hasRequiredPermission) {
                 return res.status(FORBIDDEN).json({ message: STATUS.FORBIDDEN });
             }
 
@@ -40,6 +57,6 @@ const checkPermission = (requiredPermission = PERMISSIONS.DEFAULT) => {
             return res.status(INTERNAL_SERVER_ERROR).json({ message: STATUS.INTERNAL_SERVER_ERROR });
         }
     };
-}
+};
 
 module.exports = checkPermission;

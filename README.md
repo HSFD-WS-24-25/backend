@@ -46,7 +46,12 @@
    npx prisma migrate dev
    ```
 
-   8.  Run the project
+   8.  Seed roles and permissions 
+   ```bash
+   npm run role
+   ```
+
+   9.  Run the project
    ```bash
    npm run dev
    ```

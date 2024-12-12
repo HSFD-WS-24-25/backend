@@ -1,55 +1,58 @@
 /*
 * Use this file to define the permissions for application.
 * Each permission should have a unique id and name.
-* Write the keys in uppercase, use underscores for spaces and in alphabetical order.
-* TODO: Add/Edit permissions, update their IDs and names
-* */
+* Keys are in uppercase, with underscores for spaces, in alphabetical order.
+*/
 
 module.exports = {
     PERMISSIONS: {
         CREATE_EVENT: {
             id: 1,
-            name: 'view_projects'
+            name: 'create_event'
         },
         CREATE_ORGANIZATION: {
-            id: 1,
-            name: 'view_projects'
-        },
-        DEFAULT: {
-            id: 5,
-            name: 'default'
+            id: 2,
+            name: 'create_organization'
         },
         DELETE_EVENT: {
-            id: 2,
-            name: 'view_projects'
+            id: 3,
+            name: 'delete_event'
         },
         DELETE_ORGANIZATION: {
-            id: 2,
-            name: 'view_projects'
+            id: 4,
+            name: 'delete_organization'
         },
         EDIT_EVENT: {
-            id: 3,
-            name: 'view_projects'
+            id: 5,
+            name: 'edit_event'
         },
         EDIT_ORGANIZATION: {
-            id: 3,
-            name: 'view_projects'
+            id: 6,
+            name: 'edit_organization'
         },
-        INVITE: {
-            id: 4,
-            name: 'view_projects'
+        INVITE_USER: {
+            id: 7,
+            name: 'invite_user'
         },
-        VIEW_ALL: {
-            id: 1,
-            name: 'everything'
+        VIEW_ALL_EVENTS: {
+            id: 8,
+            name: 'view_all_events'
         },
-        VIEW_CREATED: {
-            id: 5,
-            name: 'everything'
+        VIEW_CREATED_EVENTS: {
+            id: 9,
+            name: 'view_created_events'
         },
-        VIEW_INVITED: {
-            id: 5,
-            name: 'view_projects'
+        VIEW_INVITED_EVENTS: {
+            id: 10,
+            name: 'view_invited_events'
+        },
+        VIEW_ALL_USERS: { 
+            id: 11,
+            name: 'view_all_users'
+        },
+        DEFAULT: {
+            id: 12,
+            name: 'default_permission'
         },
     },
 };

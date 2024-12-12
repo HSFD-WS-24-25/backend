@@ -60,6 +60,8 @@ async function seedEvents() {
       data: event,
     });
   }
+  
+  console.log('Events seeded successfully!');
 }
 
 module.exports = { seedEvents };
