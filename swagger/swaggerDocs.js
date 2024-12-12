@@ -90,8 +90,44 @@ const rolePaths = {
         },
       },
     },
-  };
-  
+    '/users/UpdateUser': {
+    post: {
+      summary: 'update existing user',
+      tags: ['Users'],
+      security: [
+        {
+          Auth0: [],
+        },
+      ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                sub: { type: 'string', description: 'The unique identifier for the user' },
+                email: { type: 'string', description: 'The email address of the user' },
+                username: { type: 'string', description: 'The username of the user' },
+                first_name: { type: 'string', description: 'The first name of the user' },
+                last_name: { type: 'string', description: 'The last name of the user' },
+                telephone: { type: 'string', description: 'The telephone number of the user' },
+                address: { type: 'string', description: 'The address of the user' },
+              },
+              required: ['sub'],
+            },
+          },
+        },
+      },
+      responses: {
+        201: { description: 'User created successfully' },
+        400: { description: 'Bad Request' },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+};
+
   const eventPaths = {
       '/events': {
         post: {
