@@ -7,7 +7,7 @@ const checkPermission = require('../../middleware/permissionMiddleware');
 const { PERMISSIONS } = require('../../config/permissions');
 
 router.get('/', checkPermission(PERMISSIONS.VIEW_ALL_ORGANIZATION), getAllOrganizations, handleValidationErrors);
-router.get('/:id',checkPermission(PERMISSIONS.VIEW_INVITED_ORGANIZATIONS), getOrganizationById);
+router.get('/:id',checkPermission([PERMISSIONS.VIEW_INVITED_ORGANIZATIONS, PERMISSIONS.VIEW_ALL_ORGANIZATION]), getOrganizationById);
 router.post('/',checkPermission(PERMISSIONS.CREATE_ORGANIZATION), createOrganization);
 router.put('/:id',checkPermission(PERMISSIONS.EDIT_ORGANIZATION), updateOrganization, handleValidationErrors);
 router.delete('/:id',checkPermission(PERMISSIONS.DELETE_ORGANIZATION), deleteOrganization);
