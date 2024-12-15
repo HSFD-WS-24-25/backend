@@ -49,6 +49,7 @@ model Organization {
   name        String   @db.VarChar(50)
   description String
   users User[]
+  
   @@map("organizations")
 }
 
