@@ -93,7 +93,7 @@ const rolePaths = {
   };
   
   const organizationPaths = {
-    '/api/organizations': {
+    '/organizations': {
         get: {
             summary: 'Retrieve a list of all organizations',
             tags: ['Organizations'],
@@ -138,7 +138,7 @@ const rolePaths = {
             },
         },
     },
-    '/api/organizations/{id}': {
+    '/organizations/{id}': {
         get: {
             summary: 'Get an organization by ID',
             tags: ['Organizations'],
