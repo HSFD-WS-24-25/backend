@@ -50,8 +50,16 @@ module.exports = {
             id: 11,
             name: 'view_all_users'
         },
-        DEFAULT: {
+        VIEW_ALL_ORGANIZATION: {
             id: 12,
+            name: 'view_organization'
+        },
+        VIEW_INVITED_ORGANIZATIONS: {
+            id: 13,
+            name: 'view_invited_organizations'
+        },
+        DEFAULT: {
+            id: 100,
             name: 'default_permission'
         },
     },

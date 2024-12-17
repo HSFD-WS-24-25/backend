@@ -92,6 +92,134 @@ const rolePaths = {
     },
   };
   
+  const organizationPaths = {
+    '/organizations': {
+        get: {
+            summary: 'Retrieve a list of all organizations',
+            tags: ['Organizations'],
+            security: [
+              {
+                Auth0: [],
+              },
+            ],
+            responses: {
+                200: {
+                    description: 'A list of organizations',
+                },
+            },
+        },
+        post: {
+            summary: 'Create a new organization',
+            tags: ['Organizations'],
+            security: [
+              {
+                Auth0: [],
+              },
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string' },
+                                description: { type: 'string' },
+                            },
+                            required: ['name', 'description'],
+                        },
+                    },
+                },
+            },
+            responses: {
+                201: {
+                    description: 'Organization created successfully',
+                },
+            },
+        },
+    },
+    '/organizations/{id}': {
+        get: {
+            summary: 'Get an organization by ID',
+            tags: ['Organizations'],
+            security: [
+              {
+                Auth0: [],
+              },
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                },
+            ],
+            responses: {
+                200: { description: 'Organization details' },
+                404: { description: 'Organization not found' },
+            },
+        },
+        put: {
+            summary: 'Update an organization by ID',
+            tags: ['Organizations'],
+            security: [
+              {
+                Auth0: [],
+              },
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                },
+            ],
+            requestBody: {
+                required: true,
+                content: {
+                    'application/json': {
+                        schema: {
+                            type: 'object',
+                            properties: {
+                                name: { type: 'string' },
+                                description: { type: 'string' },
+                            },
+                            required: ['name', 'description'],
+                        },
+                    },
+                },
+            },
+            responses: {
+                200: { description: 'Organization updated successfully' },
+                404: { description: 'Organization not found' },
+            },
+        },
+        delete: {
+            summary: 'Delete an organization by ID',
+            tags: ['Organizations'],
+            security: [
+              {
+                Auth0: [],
+              },
+            ],
+            parameters: [
+                {
+                    name: 'id',
+                    in: 'path',
+                    required: true,
+                    schema: { type: 'integer' },
+                },
+            ],
+            responses: {
+                204: { description: 'Organization deleted successfully' },
+                404: { description: 'Organization not found' },
+            },
+        },
+    },
+};
+
   const eventPaths = {
       '/events': {
         post: {
@@ -364,9 +492,9 @@ const rolePaths = {
     
     module.exports = {
       paths: {
-        ...eventPaths,
         ...userPaths,
-        ...invitePaths,
+        ...eventPaths,
+        ...organizationPaths,
         ...rolePaths,
         ...permissionPaths,
       },
