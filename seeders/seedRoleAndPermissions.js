@@ -16,6 +16,7 @@ const roles = [
             PERMISSIONS.INVITE_USER,
             PERMISSIONS.VIEW_ALL_EVENTS,
             PERMISSIONS.VIEW_ALL_USERS,
+            PERMISSIONS.VIEW_ALL_ORGANIZATION
         ],
     },
     {
@@ -28,7 +29,8 @@ const roles = [
             PERMISSIONS.EDIT_EVENT,
             PERMISSIONS.INVITE_USER,
             PERMISSIONS.VIEW_ALL_EVENTS,
-            PERMISSIONS.VIEW_ALL_USERS
+            PERMISSIONS.VIEW_ALL_USERS,
+            PERMISSIONS.VIEW_INVITED_ORGANIZATIONS,
         ],
     },
     {
@@ -41,6 +43,7 @@ const roles = [
             PERMISSIONS.DELETE_EVENT,
             PERMISSIONS.VIEW_CREATED_EVENTS,
             PERMISSIONS.INVITE_USER,
+            PERMISSIONS.VIEW_INVITED_ORGANIZATIONS,
         ],
     },
     {
@@ -49,6 +52,7 @@ const roles = [
         description: 'Limited access to view and participate in invited events.',
         permissions: [
             PERMISSIONS.VIEW_INVITED_EVENTS,
+            PERMISSIONS.VIEW_INVITED_ORGANIZATIONS,
         ],
     },
 ];

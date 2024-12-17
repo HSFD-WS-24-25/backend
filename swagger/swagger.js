@@ -89,6 +89,15 @@ const options = {
           },
           required: ['id', 'sub', 'role_id'],
         },
+        Organization: {
+          type: 'object',
+          properties: {
+              name: { type: 'string' },
+              description: { type: 'string' },
+              user: { $ref: '#/components/schemas/User' },
+            },
+          required: ['name', 'description'],
+      },
         Event: {
           type: "object",
           properties: {
