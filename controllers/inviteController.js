@@ -5,10 +5,12 @@ const getEvent = async (req, res) => {
     //TODO: Implement Decryption of inviteID
     console.log(inviteID);
     const [ eventID, userID, creationDate ] = inviteID.split('.');
+    
     // Check if inviteID has all necessary information
     if(!eventID || !userID || !creationDate){
         return res.status(400).json({ error: 'Invalid inviteID' });
     }
+
     console.log(`Event: ${eventID} User: ${userID} Creation: ${creationDate}`);
     try {
         //Check if user is invited to event
@@ -16,9 +18,10 @@ const getEvent = async (req, res) => {
             where: { event_id: parseInt(eventID), user_id: userID },
         });
         if(!particip){
-            return res.status(404).json({ error: 'Event not found' });
+            return res.status(404).json({ error: 'No Invitation Found' });
         }
         // TODO: Check if invite is still valid
+        // No need to check if event is valid, since it is a foreign key
         const event = await prisma.event.findUnique({
             where: { id: parseInt(eventID) },
         });
