@@ -76,11 +76,11 @@ function areRecipientsValid(recipients) {
 }
 
 function isContentValid(content) {
-    if (!content) {
+    if (!content?.subject) {
         return false;
     }
 
-    if (!content.subject || (!content.plainText && !content.html)) {
+    if (!content.plainText && !content.html) {
         return false;
     }
 
