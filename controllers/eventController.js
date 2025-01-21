@@ -1,4 +1,5 @@
 const prisma = require('../config/database/prisma');
+const { sendEmail } = require('../services/emailService');
 
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
@@ -43,6 +44,8 @@ const createEvent = async (req, res) => {
                 max_additional_guests
             }
         });
+
+        sendConfirmationEmailToUser(req.user);
         res.json({ success: { message: 'Successfully saved', values: events } });
     } catch (error) {
         res.json({ error: { message: 'Error saving event. Please try again' } });
@@ -73,5 +76,26 @@ const updateEvent = async (req, res) => {
         res.status(500).json({ error: "Failed to update event" });
     }
 };
+
+const sendConfirmationEmailToUser = async (user = null) => {
+    if (!user?.email) {
+        console.error('No user email provided to sendConfirmationEmailToUser');
+        return;
+    }
+
+    const recipient = [
+        { email: user.email }
+    ];
+    const content = {
+        subject: 'Event created',
+        plainText: 'You have successfully created an event.',
+    };
+
+    try {
+        await sendEmail(recipient, content);
+    } catch (error) {
+        console.error('Error sending confirmation email:', error);
+    }
+}
 
 module.exports = { getAllEvents, createEvent, updateEvent, deleteEvent, getEventById };
