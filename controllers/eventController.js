@@ -78,13 +78,14 @@ const updateEvent = async (req, res) => {
 };
 
 const sendConfirmationEmailToUser = async (user = null) => {
-    if (!user?.email) {
-        console.error('No user email provided to sendConfirmationEmailToUser');
-        return;
-    }
+    // TODO: Uncomment this block after checking email service on production
+    // if (!user?.email) {
+    //     console.error('No user email provided to sendConfirmationEmailToUser');
+    //     return;
+    // }
 
     const recipient = [
-        { email: user.email }
+        { email: user?.email || 'shivam.svm007@gmail.com' } // TODO: Remove fallback email after testing in production
     ];
     const content = {
         subject: 'Event created',
