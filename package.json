@@ -18,6 +18,7 @@
     "prisma": "^5.22.0"
   },
   "dependencies": {
+    "@azure/communication-email": "^1.0.0",
     "@prisma/client": "^5.22.0",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
