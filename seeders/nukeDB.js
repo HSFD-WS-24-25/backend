@@ -24,6 +24,10 @@ async function deleteAllData() {
         await prisma.permission.deleteMany({});
         console.log('All permissions deleted.');
 
+        // 6. Delete all organizations
+        await prisma.organization.deleteMany({});
+        console.log('All organizations deleted.');
+
         console.log('All data has been deleted successfully.');
     } catch (error) {
         console.error('Error deleting data:', error);
