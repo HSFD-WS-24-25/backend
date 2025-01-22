@@ -90,8 +90,8 @@ const rolePaths = {
         },
       },
     },
-    '/users/UpdateUser': {
-    post: {
+    '/users/edituser/{id}': {
+    put: {
       summary: 'update existing user',
       tags: ['Users'],
       security: [
@@ -99,6 +99,14 @@ const rolePaths = {
           Auth0: [],
         },
       ],
+      parameters: [
+        {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+        },
+    ],
       requestBody: {
         required: true,
         content: {
@@ -106,7 +114,6 @@ const rolePaths = {
             schema: {
               type: 'object',
               properties: {
-                sub: { type: 'string', description: 'The unique identifier for the user' },
                 email: { type: 'string', description: 'The email address of the user' },
                 username: { type: 'string', description: 'The username of the user' },
                 first_name: { type: 'string', description: 'The first name of the user' },
