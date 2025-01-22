@@ -57,14 +57,27 @@ const participateEvent = async (req, res) => {
     const action = req.body.action;
     console.log(action)
     let dbRes = null;
-    if(action === "confirm"){
-        dbRes = await prisma.participant.update({
-            where: {
-                user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
-            },
-            data: {status: "confirm"},
-        });
-        console.log(dbRes)
+
+    try{
+        if(action === "confirm"){
+            dbRes = await prisma.participant.update({
+                where: {
+                    user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
+                },
+                data: {status: "confirm"},
+            });
+        } else if (action==="decline"){
+            dbRes = await prisma.participant.update({
+                where: {
+                    user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
+                },
+                data: {status: "decline"},
+            });
+        }
+        res.status(200).json({message: "Action completed successfully"});
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({ error: 'Internal server error' });
     }
 } 
 
