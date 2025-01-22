@@ -19,7 +19,7 @@ const validateUserData = [
     body('telephone')
         .isString().withMessage('Telephone must be a string')
         .isLength({ min: 7, max: 15 }).withMessage('Telephone must be between 7 and 15 characters')
-        .matches(/^(0|\+[1-9]\d{0,14})$/).withMessage('Telephone must be a valid phone number'),
+        .matches(/^(0\d{6,14}|\+[1-9]\d{6,14})$/).withMessage('Telephone must be a valid phone number'),
 
     body('address')
         .isString().withMessage('Name must be a string')
