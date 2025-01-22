@@ -54,20 +54,34 @@ const participateEvent = async (req, res) => {
     if(!eventID || !userID){
         return res.status(400).json({ error: 'Invalid inviteID' });
     }
-    const action = req.body.action;
-    console.log(action)
-    let dbRes = null;
 
+    // Prepare data needed to fulfill the request
+    const action = req.body.action;
+    const email = req.body.email;
+
+    const dbQueryEvent = await prisma.participant.findFirst({
+        where: { event_id: parseInt(eventID), user_id: userID },
+    });
+    const dbQueryUser = await prisma.user.findUnique({
+        where: { id: userID },
+    });
+    
+    if(dbQueryEvent.status != null && dbQueryUser.email !== email){
+        console.log("Invalid Request");
+        return res.status(400).json({ error: 'Invalid Request' });
+    }
+
+    let dbUpdateRes = null;
     try{
         if(action === "confirm"){
-            dbRes = await prisma.participant.update({
+            dbUpdateRes = await prisma.participant.update({
                 where: {
                     user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
                 },
                 data: {status: "confirm"},
             });
         } else if (action==="decline"){
-            dbRes = await prisma.participant.update({
+            dbUpdateRes = await prisma.participant.update({
                 where: {
                     user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
                 },
