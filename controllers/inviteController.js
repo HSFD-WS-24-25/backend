@@ -57,9 +57,11 @@ const participateEvent = async (req, res) => {
     const action = req.body.action;
     console.log(action)
     let dbRes = null;
-    if(action == "confirm"){
-        dbRes = prisma.participant.update({
-            where: {event_id: parseInt(eventID), user_id: userID},
+    if(action === "confirm"){
+        dbRes = await prisma.participant.update({
+            where: {
+                user_id_event_id:{event_id: parseInt(eventID), user_id: userID}
+            },
             data: {status: "confirm"},
         });
         console.log(dbRes)
