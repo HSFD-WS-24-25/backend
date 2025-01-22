@@ -69,7 +69,7 @@ const getUserById = async (id = null) => {
 // need function to check permission of the user
 
 // function to update user information assumes frontend has id 
-const editUser = async (req, res) => {
+const updateUser = async (req, res) => {
     try {
         // Get ID from req params
         const id = req.params.id;
@@ -214,4 +214,4 @@ const editUser = async (req, res) => {
     }
 
 
-    module.exports = { getAllUsers, createAndGetUser, getUser, editUser };
+    module.exports = { getAllUsers, createAndGetUser, getUser, updateUser };
