@@ -65,7 +65,7 @@ const participateEvent = async (req, res) => {
     const dbQueryUser = await prisma.user.findUnique({
         where: { id: userID },
     });
-    
+
     if(dbQueryEvent.status != null && dbQueryUser.email !== email){
         console.log("Invalid Request");
         return res.status(400).json({ error: 'Invalid Request' });
@@ -96,7 +96,39 @@ const participateEvent = async (req, res) => {
 } 
 
 const listAllGuestEvents = async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
+    const { inviteID } = req.params;
+    const [ eventID, userID] = inviteID.split('.');
+    
+    // Check if inviteID has all necessary information
+    if(!eventID || !userID){
+        return res.status(400).json({ error: 'Invalid inviteID' });
+    }
+
+    // Prepare data needed to fulfill the request
+    const email = req.body.email;
+    console.log(email)
+    let dbEvents = null;
+    try{
+        const dbQueryUser = await prisma.user.findUnique({
+            where: { id: userID },
+        });
+        if(dbQueryUser.email !== email){
+            console.log("Invalid Request");
+            return res.status(400).json({ error: 'Invalid Request: Email not valid for this ID' });
+        }
+
+        dbEvents = await prisma.participant.findMany({
+            where: { user_id: userID },
+            include: { event: true },
+        });
+    } catch(err){
+        console.log(err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+    
+    console.log(dbEvents);
+    res.json(dbEvents);
 }
 
 module.exports = { getEvent, participateEvent, listAllGuestEvents };
