@@ -108,8 +108,8 @@ const updateUser = async (req, res) => {
         const data = {
             email: req.body?.email || req.body?.formData?.email || null,
             username: req.body?.username || req.body?.formData?.username || null,
-            first_name: req.body?.first_name || req.body?.formData?.first_name || null,
-            last_name: req.body?.last_name || req.body?.formData?.last_name || null,
+            first_name: req.body?.firstName || req.body?.formData?.firstName || null,
+            last_name: req.body?.lastName || req.body?.formData?.lastName || null,
             telephone: req.body?.telephone || req.body?.formData?.telephone || null,
             address: req.body?.address || req.body?.formData?.address || null,
         };
