@@ -66,7 +66,47 @@ const getUserById = async (id = null) => {
     return null;
 }
 
-// need function to check permission of the user
+const deleteUser = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        if (!id) {
+            console.error('No id provided to delete user');
+            return res.status(400).json({ error: 'No id provided to delete user' });
+        }
+
+        // Check if user exists
+        const user = await getUserById(id);
+        if (!user) {
+            console.error('User not found');
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Authorization check (self or admin)
+        if (!isSelf(req.sub, id)) {
+            const permission = await prisma.user.findUnique({
+                where: { sub: req.sub },
+                include: { roles: true },
+            });
+
+            if (!permission || !permission.roles.some(role => role.id <= ROLES.ADMIN_INSTANCE.id)) {
+                console.error('User does not have permission to delete');
+                return res.status(403).json({ error: 'User does not have permission to delete' });
+            }
+        }
+
+        // Delete the user
+        await prisma.user.delete({
+            where: { id },
+        });
+
+        console.log('User deleted successfully');
+        return res.status(200).json({ success: true, message: 'User deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 // function to update user information assumes frontend has id 
 const updateUser = async (req, res) => {
@@ -177,8 +217,8 @@ const updateUser = async (req, res) => {
 };
 
 
-    // get id based on sub
-    const getId = async (sub) => {
+// get id based on sub
+const getId = async (sub) => {
         try {
             const user = await prisma.user.findUnique({
                 where: { sub },
@@ -188,16 +228,10 @@ const updateUser = async (req, res) => {
             console.error('Error checking if user exists:', error);
         }
         return null;
-    }
+}
 
-    // get the users information based on the sub
-    const getSelf = async (req, res) => {
-
-
-
-    }
-    // simple function to ensure that the user has the right to alte information
-    const isSelf = async (sub, id) => {
+// simple function to ensure that the user has the right to alte information
+const isSelf = async (sub, id) => {
         try {
             const user = await prisma.user.findUnique({
                 where: { sub },
@@ -211,7 +245,5 @@ const updateUser = async (req, res) => {
             console.error('Error checking if user exists:', error);
         }
         return null;
-    }
-
-
-    module.exports = { getAllUsers, createAndGetUser, getUser, updateUser };
+}
+module.exports = { getAllUsers, createAndGetUser, getUser, updateUser, deleteUser };
