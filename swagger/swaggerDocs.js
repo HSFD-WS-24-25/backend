@@ -91,6 +91,92 @@ const rolePaths = {
       },
     },
     '/users/{id}': {
+      delete: {
+        summary: 'Delete a user',
+        tags: ['Users'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            description: 'The unique identifier of the user to delete',
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'User deleted successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean', example: true },
+                    message: { type: 'string', example: 'User deleted successfully' },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'No id provided to delete user' },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description: 'Forbidden',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'User does not have permission to delete' },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'Not Found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'User not found' },
+                  },
+                },
+              },
+            },
+          },
+          500: {
+            description: 'Internal Server Error',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'Internal Server Error' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     put: {
       summary: 'update existing user',
       tags: ['Users'],
