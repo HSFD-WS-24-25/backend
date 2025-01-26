@@ -90,7 +90,7 @@ const rolePaths = {
         },
       },
     },
-    '/users/edituser/{id}': {
+    '/users/{id}': {
     put: {
       summary: 'update existing user',
       tags: ['Users'],
