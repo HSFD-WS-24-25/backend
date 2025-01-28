@@ -120,6 +120,11 @@ const updateEvent = async (req, res) => {
 };
 
 const sendConfirmationEmailToUser = async (user = null, event) => {
+    if (!event) {
+        console.error('No event provided to sendConfirmationEmailToUser');
+        return;
+    }
+
     const email = user?.email;
     if (!email) {
         console.error('No user email provided to sendConfirmationEmailToUser');
