@@ -1,6 +1,11 @@
 function prepareHtmlEvent(heading, event) {
+    if (!event) {
+        console.error('No event provided to prepareHtmlEvent');
+        return '';
+    }
+
     return `
-        <p>${ heading }</p>
+        <p>${ heading ?? 'INFORMATION:' }</p>
         <ul>
             <li><strong>Name:</strong> ${ event.name ?? 'N/A' }</li>
             <li><strong>Description:</strong> ${ event.description ?? 'N/A' }</li>
