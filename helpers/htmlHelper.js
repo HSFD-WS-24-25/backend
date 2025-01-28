@@ -4,17 +4,25 @@ function prepareHtmlEvent(heading, event) {
         return '';
     }
 
+    const fields = [
+        { label: 'Name', value: event.name },
+        { label: 'Description', value: event.description },
+        { label: 'Location', value: event.location },
+        { label: 'Start Date', value: event.date_start },
+        { label: 'End Date', value: event.date_end },
+        { label: 'Capacity', value: event.capacity },
+        { label: 'Reminder', value: event.reminder },
+        { label: 'Max Additional Guests', value: event.max_additional_guests }
+    ];
+
+    const listItems = fields.map(
+        field => `<li><strong>${field.label}:</strong> ${field.value ?? 'N/A'}</li>`
+    ).join('');
+
     return `
-        <p>${ heading ?? 'INFORMATION:' }</p>
+        <p>${heading ?? 'INFORMATION:'}</p>
         <ul>
-            <li><strong>Name:</strong> ${ event.name ?? 'N/A' }</li>
-            <li><strong>Description:</strong> ${ event.description ?? 'N/A' }</li>
-            <li><strong>Location:</strong> ${ event.location ?? 'N/A' }</li>
-            <li><strong>Start Date:</strong> ${ event.date_start ?? 'N/A' }</li>
-            <li><strong>End Date:</strong> ${ event.date_end ?? 'N/A' }</li>
-            <li><strong>Capacity:</strong> ${ event.capacity ?? 'N/A' }</li>
-            <li><strong>Reminder:</strong> ${ event.reminder ?? 'N/A' }</li>
-            <li><strong>Max Additional Guests:</strong> ${ event.max_additional_guests ?? 'N/A' }</li>
+            ${listItems}
         </ul>
     `;
 }
