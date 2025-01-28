@@ -2,14 +2,33 @@ const prisma = require('../config/database/prisma');
 
 async function seedInvite() {
     try {
-        const participants = await prisma.participant.createMany({
-            data: [
-                //change the event_id and user_id to match the data in the database !!!
-                { event_id: 1, user_id: '8f9551d8-37c8-4ad4-a038-3588a8d62d1f', status: null },
-                { event_id: 1, user_id: '6e67a084-8540-453b-874b-485e5ebac3fa', status: null },
-                { event_id: 2, user_id: '8f9551d8-37c8-4ad4-a038-3588a8d62d1f', status: null },
-            ],
+        // Fetch all events and users from the database
+        const events = await prisma.event.findMany();
+        const users = await prisma.user.findMany();
+
+        if (!events.length || !users.length) {
+            console.log('No events or users found in the database.');
+            return;
+        }
+
+        // Pair users and events to create participant entries
+        const participantsData = [];
+        events.forEach((event) => {
+            users.forEach((user) => {
+                participantsData.push({
+                    event_id: event.id,
+                    user_id: user.id,
+                    status: null, // Default status
+                });
+            });
         });
+
+        // Insert participants into the database
+        const participants = await prisma.participant.createMany({
+            data: participantsData,
+            skipDuplicates: true, // Avoid duplicating participants if seeding multiple times
+        });
+
         console.log('Seeded Participants:', participants.count);
     } catch (err) {
         console.error('Error while seeding database:', err);
