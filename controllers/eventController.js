@@ -16,12 +16,50 @@ const getEventById = async (req, res) => {
     try {
         const event = await prisma.event.findUnique({
             where: { id: parseInt(id) },
+            include: {
+                participants: {
+                    where: { event_id: parseInt(id) },
+                    select: {
+                        status: true,
+                        additional_guest: true,
+                        user: {
+                            select: {
+                                id: true,
+                                first_name: true,
+                                last_name: true,
+                                email: true,
+                                telephone: true,
+                                address: true,
+                            },
+                        }
+                    },
+                },
+            },
         });
+
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
-        res.json(event);
+
+        const participantCount = await prisma.participant.count({
+            where: { event_id: parseInt(id) },
+        });
+
+        const additionalGuestsCount = await prisma.participant.aggregate({
+            where: { event_id: parseInt(id) },
+            _sum: {
+                additional_guest: true,
+            },
+        });
+
+        res.json({
+            ...event,
+            _count: {
+                total_participants: participantCount + (additionalGuestsCount._sum.additional_guest || 0),
+            },
+        });
     } catch (error) {
+        console.error('Error fetching event:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
