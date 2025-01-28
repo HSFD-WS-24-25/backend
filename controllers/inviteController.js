@@ -128,7 +128,11 @@ const listAllGuestEvents = async (req, res) => {
     }
     
     console.log(dbEvents);
-    res.json(dbEvents);
+    const response = {
+        "check":"auth",
+        dbEvents
+    }
+    res.json(response);
 }
 
 module.exports = { getEvent, participateEvent, listAllGuestEvents };
