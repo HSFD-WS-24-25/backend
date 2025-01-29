@@ -15,13 +15,13 @@ const inviteGuests = async (req, res) => {
     // Convert emails to objects with email property (Needed for sendEmail function)
     const emailObjects = emails.map(email => ({ email }));
 
-    const emailContent = {
-        subject: 'Event-Invitation',
-        plainText: `You are invited to the following event...`,
-    }
-
     try {
         emailObjects.forEach(object => {
+            // TODO: Assign unique invitation URL to each guest
+            const emailContent = {
+                subject: 'Event-Invitation',
+                plainText: `You are invited to the following event...`,
+            }
             addGuestToDatabase(object.email)
             // Not sending all emails at once, as every user has specific url to participate
             sendEmail([object], emailContent);
