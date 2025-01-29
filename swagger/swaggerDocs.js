@@ -375,7 +375,7 @@ const rolePaths = {
     };
 
     const invitePaths = {
-      '/invites/{inviteID}': {
+      '/invite/{inviteID}': {
           get: {
               summary: 'Retrieve event details for an invite',
               tags: ['Invites'],
