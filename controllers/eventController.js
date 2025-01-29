@@ -1,6 +1,7 @@
 const prisma = require('../config/database/prisma');
 const { sendEmail } = require('../services/emailService');
 const { prepareHtmlEvent } = require('../helpers/htmlHelper');
+const { ROLES } = require('../config/roles');
 
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
@@ -14,10 +15,13 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
     const { id } = req.params;
+    const shouldIncludeParticipants = req.user?.role_id !== ROLES.GUEST.id;
+
     try {
-        const event = await prisma.event.findUnique({
-            where: { id: parseInt(id) },
-            include: {
+        let participants = {};
+        let totalParticipants = 0;
+        if (shouldIncludeParticipants) {
+            participants = {
                 participants: {
                     where: { event_id: parseInt(id) },
                     select: {
@@ -35,30 +39,42 @@ const getEventById = async (req, res) => {
                         }
                     },
                 },
-            },
+            };
+
+            const participantCount = await prisma.participant.count({
+                where: { event_id: parseInt(id) },
+            });
+
+            const additionalGuestsCount = await prisma.participant.aggregate({
+                where: { event_id: parseInt(id) },
+                _sum: {
+                    additional_guest: true,
+                },
+            });
+
+            totalParticipants = participantCount + (additionalGuestsCount._sum.additional_guest || 0);
+        }
+
+        const event = await prisma.event.findUnique({
+            where: { id: parseInt(id) },
+            include: participants,
         });
 
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
 
-        const participantCount = await prisma.participant.count({
-            where: { event_id: parseInt(id) },
-        });
-
-        const additionalGuestsCount = await prisma.participant.aggregate({
-            where: { event_id: parseInt(id) },
-            _sum: {
-                additional_guest: true,
-            },
-        });
-
-        res.json({
+        const response = {
             ...event,
-            _count: {
-                total_participants: participantCount + (additionalGuestsCount._sum.additional_guest || 0),
-            },
-        });
+        };
+
+        if (shouldIncludeParticipants) {
+            response._count = {
+                total_participants: totalParticipants,
+            };
+        }
+
+        res.json(response);
     } catch (error) {
         console.error('Error fetching event:', error);
         res.status(500).json({ error: 'Internal server error' });
