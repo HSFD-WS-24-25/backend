@@ -496,6 +496,7 @@ const rolePaths = {
         ...eventPaths,
         ...userPaths,
         ...invitePaths,
+        ...organizationPaths,
         ...rolePaths,
         ...permissionPaths,
       },
