@@ -502,11 +502,129 @@ const rolePaths = {
         },
       },
     };
+
+    const invitePaths = {
+      '/invite/{inviteID}': {
+          get: {
+              summary: 'Retrieve event details for an invite',
+              tags: ['Invites'],
+              parameters: [
+                  {
+                      name: 'inviteID',
+                      in: 'path',
+                      required: true,
+                      description: 'The unique invite identifier',
+                      schema: { type: 'string' },
+                  },
+              ],
+              responses: {
+                  200: {
+                      description: 'Event details retrieved successfully',
+                      content: {
+                          'application/json': {
+                              schema: {
+                                  type: 'object',
+                                  properties: {
+                                      check: { type: 'string', enum: ['used', 'unused'] },
+                                      event: { $ref: '#/components/schemas/Event' },
+                                      message: { type: 'string' },
+                                  },
+                              },
+                          },
+                      },
+                  },
+                  400: { description: 'Invalid inviteID' },
+                  404: { description: 'No Invitation Found' },
+                  500: { description: 'Internal server error' },
+              },
+          },
+          post: {
+              summary: 'Participate in an event',
+              tags: ['Invites'],
+              parameters: [
+                  {
+                      name: 'inviteID',
+                      in: 'path',
+                      required: true,
+                      description: 'The unique invite identifier',
+                      schema: { type: 'string' },
+                  },
+              ],
+              requestBody: {
+                  required: true,
+                  content: {
+                      'application/json': {
+                          schema: {
+                              type: 'object',
+                              properties: {
+                                  action: { type: 'string', enum: ['confirm', 'decline'] },
+                                  email: { type: 'string', format: 'email' },
+                              },
+                              required: ['action', 'email'],
+                          },
+                      },
+                  },
+              },
+              responses: {
+                  200: { description: 'Action completed successfully' },
+                  400: { description: 'Invalid Request' },
+                  500: { description: 'Internal server error' },
+              },
+          },
+      },
+      '/invites/{inviteID}/events': {
+          get: {
+              summary: 'List all guest events for an invite',
+              tags: ['Invites'],
+              parameters: [
+                  {
+                      name: 'inviteID',
+                      in: 'path',
+                      required: true,
+                      description: 'The unique invite identifier',
+                      schema: { type: 'string' },
+                  },
+              ],
+              requestBody: {
+                  required: true,
+                  content: {
+                      'application/json': {
+                          schema: {
+                              type: 'object',
+                              properties: {
+                                  email: { type: 'string', format: 'email' },
+                              },
+                              required: ['email'],
+                          },
+                      },
+                  },
+              },
+              responses: {
+                  200: {
+                      description: 'List of events retrieved successfully',
+                      content: {
+                          'application/json': {
+                              schema: {
+                                  type: 'array',
+                                  items: { $ref: '#/components/schemas/Event' },
+                              },
+                          },
+                      },
+                  },
+                  400: { description: 'Invalid Request: Email not valid for this ID' },
+                  500: { description: 'Internal server error' },
+              },
+          },
+      },
+  };
+  
     
     module.exports = {
       paths: {
         ...userPaths,
         ...eventPaths,
+        ...userPaths,
+        ...invitePaths,
         ...organizationPaths,
         ...rolePaths,
         ...permissionPaths,

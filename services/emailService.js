@@ -7,6 +7,10 @@ if (!connectionString) {
 }
 const emailClient = new EmailClient(connectionString);
 
+/*
+ * @param {Array} recipients - An array of objects with 'email' (mandatory) property. Ex: [{ email: "user@user.com", displayName: "user" }, { email: "user2@user.com" }]
+ * @param {Object} content - An object with 'subject' (optional) and either 'plainText' or 'html' property. Ex: { subject: "This is subject", html: "<h1>content in html</h1>" }
+ */
 async function sendEmail(recipients = null, content = null) {
     if (!areRecipientsValid(recipients)) {
         throw new Error("Invalid recipients! Recipients must be an array of objects with email property.");
@@ -21,13 +25,13 @@ async function sendEmail(recipients = null, content = null) {
             senderAddress: senderEmail,
             content: {
                 subject: content.subject || "(No subject)",
-                plainText: content.plainText || "",
                 html: content.html || "",
+                plainText: content.plainText || "",
             },
             recipients: {
-                to: recipients.map((recipient) => ({
+                bcc: recipients.map((recipient) => ({
                     address: recipient.email,
-                    displayName: recipient.displayName || null,
+                    ...(recipient.displayName && { displayName: recipient.displayName }), // TODO: Display name is not visible when using bcc. When using 'to' instead of 'bcc', everyone can see it. Find a better implementation.
                 })),
             },
         };
@@ -76,7 +80,7 @@ function areRecipientsValid(recipients) {
 }
 
 function isContentValid(content) {
-    if (!content?.subject) {
+    if (!content || typeof content !== "object" || 0 === Object.keys(content).length) {
         return false;
     }
 
