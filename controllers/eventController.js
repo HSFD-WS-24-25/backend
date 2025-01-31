@@ -113,14 +113,31 @@ const createEvent = async (req, res) => {
 const deleteEvent = async (req, res) => {
     try {
         const { id } = req.params;
+
+        // Ensure the event ID is valid
+        if (!id) {
+            console.error('No id provided to delete event');
+            return res.status(400).json({ error: 'No id provided to delete event' });
+        }
+
+        // Delete records from the participant table associated with the event
+        await prisma.participant.deleteMany({
+            where: { event_id: parseInt(id, 10) },
+        });
+
+        // Delete the event from the event table
         await prisma.event.delete({
             where: { id: parseInt(id, 10) },
         });
+
+        console.log('Event deleted successfully from participant and event tables');
         res.status(204).send();
     } catch (error) {
-        res.status(500).json({ error: "Failed to delete event" });
+        console.error('Failed to delete event:', error);
+        res.status(500).json({ error: 'Failed to delete event' });
     }
 };
+
 
 const updateEvent = async (req, res) => {
     try {
