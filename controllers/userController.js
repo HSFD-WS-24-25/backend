@@ -95,6 +95,11 @@ const deleteUser = async (req, res) => {
             }
         }
 
+        // Delete records from the participant table
+        await prisma.participant.deleteMany({
+            where: { user_id: id },
+        });
+        
         // Delete the user
         await prisma.user.delete({
             where: { id },
@@ -127,7 +132,7 @@ const updateUser = async (req, res) => {
         }
 
         // Check if user has the right to update this information (self or admin)
-        if (!isSelf(user.sub, id)) {
+        if (!isSelf(req.sub, id)) {
             try {
                 const permission = await prisma.user.findUnique({
                     where: { sub: req.sub },
