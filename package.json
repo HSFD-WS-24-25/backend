@@ -8,6 +8,7 @@
     "dev": "nodemon app.js",
     "role": "node seeders/seedRoleAndPermissions.js",
     "seed": "node seeders/runSeeds.js",
+    "invite": "node seeders/seedInvite.js",
     "nuke": "node seeders/nukeDB.js"
   },
   "keywords": [],

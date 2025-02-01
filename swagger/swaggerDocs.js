@@ -90,8 +90,138 @@ const rolePaths = {
         },
       },
     },
-  };
-  
+    '/users/{id}': {
+      delete: {
+        summary: 'Delete a user',
+        tags: ['Users'],
+        security: [
+          {
+            Auth0: [],
+          },
+        ],
+        parameters: [
+          {
+            name: 'id',
+            in: 'path',
+            required: true,
+            description: 'The unique identifier of the user to delete',
+            schema: { type: 'string' },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'User deleted successfully',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    success: { type: 'boolean', example: true },
+                    message: { type: 'string', example: 'User deleted successfully' },
+                  },
+                },
+              },
+            },
+          },
+          400: {
+            description: 'Bad Request',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'No id provided to delete user' },
+                  },
+                },
+              },
+            },
+          },
+          403: {
+            description: 'Forbidden',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'User does not have permission to delete' },
+                  },
+                },
+              },
+            },
+          },
+          404: {
+            description: 'Not Found',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'User not found' },
+                  },
+                },
+              },
+            },
+          },
+          500: {
+            description: 'Internal Server Error',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    error: { type: 'string', example: 'Internal Server Error' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    put: {
+      summary: 'update existing user',
+      tags: ['Users'],
+      security: [
+        {
+          Auth0: [],
+        },
+      ],
+      parameters: [
+        {
+            name: 'id',
+            in: 'path',
+            required: true,
+            schema: { type: 'string' },
+        },
+    ],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                email: { type: 'string', description: 'The email address of the user' },
+                username: { type: 'string', description: 'The username of the user' },
+                first_name: { type: 'string', description: 'The first name of the user' },
+                last_name: { type: 'string', description: 'The last name of the user' },
+                telephone: { type: 'string', description: 'The telephone number of the user' },
+                address: { type: 'string', description: 'The address of the user' },
+                role_id: { type: 'integer', description: 'The role ID of the user' },
+              },
+              required: ['sub'],
+            },
+          },
+        },
+      },
+      responses: {
+        201: { description: 'User created successfully' },
+        400: { description: 'Bad Request' },
+        500: { description: 'Internal Server Error' },
+      },
+    },
+  },
+};
+
   const organizationPaths = {
     '/organizations': {
         get: {
