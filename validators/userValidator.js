@@ -7,7 +7,7 @@ const validateUserData = [
 
     body('lastName')
         .isString().withMessage('Last name must be a string')
-        .isLength({ min: 10, max: 100 }).withMessage('Last name must be between 3 and 100 characters'),
+        .isLength({ min: 3, max: 100 }).withMessage('Last name must be between 3 and 100 characters'),
 
     body('username')
         .isString().withMessage('Username must be a string'),

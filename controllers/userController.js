@@ -157,6 +157,7 @@ const updateUser = async (req, res) => {
             last_name: req.body?.lastName || req.body?.formData?.lastName || null,
             telephone: req.body?.telephone || req.body?.formData?.telephone || null,
             address: req.body?.address || req.body?.formData?.address || null,
+            role_id: req.body?.role_id || req.body?.formData?.role_id || null,
         };
 
         // Define the expected types for each field
@@ -167,6 +168,7 @@ const updateUser = async (req, res) => {
             last_name: { type: 'string', maxLength: 50 },
             telephone: { type: 'string', maxLength: 20 },
             address: { type: 'string', maxLength: 255 },
+            role_id: { type: 'number' }
         };
 
         // Validate the data types and lengths

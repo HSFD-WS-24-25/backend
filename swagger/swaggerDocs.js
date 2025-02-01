@@ -206,6 +206,7 @@ const rolePaths = {
                 last_name: { type: 'string', description: 'The last name of the user' },
                 telephone: { type: 'string', description: 'The telephone number of the user' },
                 address: { type: 'string', description: 'The address of the user' },
+                role_id: { type: 'integer', description: 'The role ID of the user' },
               },
               required: ['sub'],
             },
