@@ -84,9 +84,10 @@ model Event {
 model Announcement {
 id                       Int           @id @default(autoincrement())
 title                    String           
-method                   String
+type                     String
 date_start               DateTime
 date_end                 DateTime
+target                   String
 status                   String
 
 @@map("announcements")
