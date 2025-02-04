@@ -80,3 +80,14 @@ model Event {
 
   @@map("events")
 }
+
+model Announcement {
+id                       Int           @id @default(autoincrement())
+titel                    String           
+method                   String
+date_start               DateTime
+date_end                 DateTime
+status                   String
+
+@@map("announcements")
+}
