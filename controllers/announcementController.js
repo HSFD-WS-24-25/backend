@@ -10,5 +10,31 @@ const getAllAnnouncements = async (req, res) => {
     }
 };
 
+const createAnnouncement = async (req, res) => {
+    try {
+        const { titel, method, status } = req.body;
+        const date_start = new Date(req.body.date_start);
+        const date_end = new Date(req.body.date_end);
+
+        const announcementsData = {
+            titel, 
+            method, 
+            date_start, 
+            date_end, 
+            status 
+        };
+
+        const announcement = await prisma.announcement.create({
+            data: announcementsData,
+        });
+
+        res.json({ success: { message: 'Successfully saved', values: announcement } });
+    } catch (error) {
+        console.error('Error saving event:', error);
+        res.json({ error: { message: 'Error saving event. Please try again' } });
+    }
+};
+
+
 
 module.exports = { getAllAnnouncements, createAnnouncement };
