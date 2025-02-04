@@ -1,4 +1,6 @@
 const { sendEmail } = require('../services/emailService');
+const { prisma } = require('../prisma/prisma-client');
+const { roles } = require('../constants/roles');
 
 const inviteGuests = async (req, res) => {
     const emails = req.body.emails;
@@ -38,11 +40,21 @@ const getAllInvitedGuests = async (req, res) => {
     // Implement this function to get all invited guests
 }
 
-function addGuestToDatabase(email) {
+
+// Should the id be returned? Would allow easier invite link generation
+async function addGuestToDatabase(email) {
     const sub = 'internal';
     // Add guest to database if not already present
     try {
-
+        const user = await prisma.participant.create({
+            data: {
+                email: email,
+                role_id: roles.GUEST.id,
+                sub,
+            },
+        });
+        return user;
+    // Is this really an error? A user might already exist
     } catch (error) {
         console.error('Error adding guest to database:', error);
         throw new Error('Error adding guest to database');
