@@ -1,11 +1,12 @@
 const { sendEmail } = require('../services/emailService');
-const { prisma } = require('../config/database/prisma');
+const prisma = require('../config/database/prisma');
 const { roles } = require('../config/roles');
 const { prepareHtmlInvite } = require('../helpers/htmlHelper');
 
 const inviteGuests = async (req, res) => {
     const emails = req.body.emails;
-    const eventID = req.body.eventID;
+    //Switch to params as it is more logical to have the eventID in the URL
+    const eventID = req.params.eventID;
 
     if (!eventID) {
         return res.status(400).json({ error: 'Invalid request. EventID cannot be empty' });
@@ -17,18 +18,30 @@ const inviteGuests = async (req, res) => {
 
     // Convert emails to objects with email property (Needed for sendEmail function)
     const emailObjects = emails.map(email => ({ email }));
-
+    
     try {
-        emailObjects.forEach(object => {
+        // foreach does not work with async/await
+        for (object of emailObjects) {
+            console.log('Inviting guest:', object);
+            // First check if the guest is already in the database
+            let guest = await prisma.user.findUnique({
+                where: {
+                    email: object.email,
+                },
+            });
+            if (!guest) {
+                // If not, add the guest to the database
+                guest = addGuestToDatabase(object.email);
+            }
             // TODO: Assign unique invitation URL to each guest
             const emailContent = {
                 subject: 'Event-Invitation',
-                plainText: `You are invited to the following event...`,
+                html: prepareHtmlInvite('Event Invitation', object, eventID),
             }
-            addGuestToDatabase(object.email)
+            console.log('Email content:', emailContent);
             // Not sending all emails at once, as every user has specific url to participate
-            sendEmail([object], emailContent);
-        });
+            //sendEmail([object], emailContent);
+        };
 
         return res.json({ message: 'Invitation sent successfully' });
     } catch (error) {
@@ -39,6 +52,7 @@ const inviteGuests = async (req, res) => {
 
 const getAllInvitedGuests = async (req, res) => {
     // Implement this function to get all invited guests
+    res.status(501).json({ error: 'Not implemented' });
 }
 
 

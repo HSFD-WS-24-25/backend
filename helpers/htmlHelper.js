@@ -1,3 +1,5 @@
+const CLIENT_URL = process.env.CLIENT_URL
+
 function prepareHtmlEvent(heading, event) {
     if (!event) {
         console.error('No event provided to prepareHtmlEvent');
