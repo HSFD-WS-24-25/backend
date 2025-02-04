@@ -48,13 +48,16 @@ function prepareHtmlInvite(heading, user, event) {
         field => `<li><strong>${field.label}:</strong> ${field.value ?? 'N/A'}</li>`
     ).join('');
 
+    const inviteURL = `${CLIENT_URL}/join/${event.id}.${user.id}`;
+
     return `
-        <p>${heading ?? 'INFORMATION:'}</p>
+        <h1>${heading ?? 'INFORMATION:'}</h1>
+        <p>Dear ${user.first_name}, you have been invited to:</p>
         <ul>
             ${listItems}
         </ul>
         <h3>Invitation Link:</h3>
-        <a href="${event.invite_url}">${CLIENT_URL}/join/${event.id}.${user.id}</a>
+        <a href="${inviteURL}">${inviteURL}</a>
     `;
 }
 

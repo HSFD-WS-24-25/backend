@@ -6,7 +6,7 @@ const { prepareHtmlInvite } = require('../helpers/htmlHelper');
 const inviteGuests = async (req, res) => {
     const emails = req.body.emails;
     //Switch to params as it is more logical to have the eventID in the URL
-    const eventID = req.params.eventID;
+    const eventID = parseInt(req.params.eventID);
 
     if (!eventID) {
         return res.status(400).json({ error: 'Invalid request. EventID cannot be empty' });
@@ -18,29 +18,34 @@ const inviteGuests = async (req, res) => {
 
     // Convert emails to objects with email property (Needed for sendEmail function)
     const emailObjects = emails.map(email => ({ email }));
-    
+    // Get event by ID
+    const event = await getEventById(eventID);
+
     try {
         // foreach does not work with async/await
-        for (object of emailObjects) {
-            console.log('Inviting guest:', object);
+        // Could check this out: 
+        // https://stackoverflow.com/questions/37576685/using-async-await-with-a-foreach-loop
+        for (emailObj of emailObjects) {
             // First check if the guest is already in the database
             let guest = await prisma.user.findUnique({
                 where: {
-                    email: object.email,
+                    email: emailObj.email,
                 },
             });
             if (!guest) {
                 // If not, add the guest to the database
-                guest = addGuestToDatabase(object.email);
+                guest = await addGuestToDatabase(emailObj.email);
             }
-            // TODO: Assign unique invitation URL to each guest
+            // TODO: Add Guest to Event
+
+
+            // Send email to guest
             const emailContent = {
-                subject: 'Event-Invitation',
-                html: prepareHtmlInvite('Event Invitation', object, eventID),
+                subject: `Event-Invitation: ${event.name}`,
+                html: prepareHtmlInvite('Event Invitation', guest, event),
             }
-            console.log('Email content:', emailContent);
             // Not sending all emails at once, as every user has specific url to participate
-            //sendEmail([object], emailContent);
+            sendEmail([emailObj], emailContent);
         };
 
         return res.json({ message: 'Invitation sent successfully' });
@@ -73,6 +78,22 @@ async function addGuestToDatabase(email) {
     } catch (error) {
         console.error('Error adding guest to database:', error);
         throw new Error('Error adding guest to database');
+    }
+}
+
+
+// Can we do this with eventContoller.js?
+async function getEventById(eventID) {
+    try {
+        const event = await prisma.event.findUnique({
+            where: {
+                id: eventID,
+            },
+        });
+        return event;
+    } catch (error) {
+        console.error('Error getting event by ID:', error);
+        throw new Error('Error getting event by ID');
     }
 }
 
