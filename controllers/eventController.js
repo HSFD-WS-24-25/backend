@@ -1,5 +1,7 @@
 const prisma = require('../config/database/prisma');
 const { sendEmail } = require('../services/emailService');
+const { prepareHtmlEvent } = require('../helpers/htmlHelper');
+const { ROLES } = require('../config/roles');
 
 // https://www.prisma.io/docs/orm/prisma-client/queries/crud
 const getAllEvents = async (req, res) => {
@@ -13,15 +15,68 @@ const getAllEvents = async (req, res) => {
 
 const getEventById = async (req, res) => {
     const { id } = req.params;
+    const shouldIncludeParticipants = req.user?.role_id !== ROLES.GUEST.id;
+
     try {
+        let participants = {};
+        let totalParticipants = 0;
+        if (shouldIncludeParticipants) {
+            participants = {
+                participants: {
+                    where: { event_id: parseInt(id) },
+                    select: {
+                        status: true,
+                        additional_guest: true,
+                        user: {
+                            select: {
+                                id: true,
+                                first_name: true,
+                                last_name: true,
+                                email: true,
+                                telephone: true,
+                                address: true,
+                            },
+                        }
+                    },
+                },
+            };
+
+            const participantCount = await prisma.participant.count({
+                where: { event_id: parseInt(id) },
+            });
+
+            const additionalGuestsCount = await prisma.participant.aggregate({
+                where: { event_id: parseInt(id) },
+                _sum: {
+                    additional_guest: true,
+                },
+            });
+
+            totalParticipants = participantCount + (additionalGuestsCount._sum.additional_guest || 0);
+        }
+
         const event = await prisma.event.findUnique({
             where: { id: parseInt(id) },
+            include: participants,
         });
+
         if (!event) {
             return res.status(404).json({ error: 'Event not found' });
         }
-        res.json(event);
+
+        const response = {
+            ...event,
+        };
+
+        if (shouldIncludeParticipants) {
+            response._count = {
+                total_participants: totalParticipants,
+            };
+        }
+
+        res.json(response);
     } catch (error) {
+        console.error('Error fetching event:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -32,22 +87,25 @@ const createEvent = async (req, res) => {
         const date_start = new Date(req.body.date_start);
         const date_end = new Date(req.body.date_end);
 
-        const events = await prisma.event.create({
-            data: {
-                name,
-                description,
-                location,
-                date_start,
-                date_end,
-                capacity,
-                reminder,
-                max_additional_guests
-            }
+        const eventData = {
+            name,
+            description,
+            location,
+            date_start,
+            date_end,
+            capacity,
+            reminder,
+            max_additional_guests
+        };
+
+        const event = await prisma.event.create({
+            data: eventData,
         });
 
-        sendConfirmationEmailToUser(req.user);
-        res.json({ success: { message: 'Successfully saved', values: events } });
+        sendConfirmationEmailToUser(req.user, event);
+        res.json({ success: { message: 'Successfully saved', values: event } });
     } catch (error) {
+        console.error('Error saving event:', error);
         res.json({ error: { message: 'Error saving event. Please try again' } });
     }
 };
@@ -77,19 +135,36 @@ const updateEvent = async (req, res) => {
     }
 };
 
-const sendConfirmationEmailToUser = async (user = null) => {
-    // TODO: Uncomment this block after checking email service on production
-    // if (!user?.email) {
-    //     console.error('No user email provided to sendConfirmationEmailToUser');
-    //     return;
-    // }
+const sendConfirmationEmailToUser = async (user = null, event) => {
+    if (!event) {
+        console.error('No event provided to sendConfirmationEmailToUser');
+        return;
+    }
+
+    const email = user?.email;
+    if (!email) {
+        console.error('No user email provided to sendConfirmationEmailToUser');
+        return;
+    }
+
+    let name = null;
+    const firstName = user?.first_name;
+    const lastName = user?.last_name;
+    if (firstName && lastName) {
+        name = `${ firstName } ${ lastName }`;
+    }
 
     const recipient = [
-        { email: user?.email || 'shivam.svm007@gmail.com' } // TODO: Remove fallback email after testing in production
+        {
+            email,
+            displayName: name,
+        }
     ];
+
+    const heading = 'You have successfully created the following event:';
     const content = {
         subject: 'Event created',
-        plainText: 'You have successfully created an event.',
+        html: prepareHtmlEvent(heading, event),
     };
 
     try {
