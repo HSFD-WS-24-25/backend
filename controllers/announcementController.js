@@ -2,7 +2,7 @@ const prisma = require('../config/database/prisma');
 
 const getAllAnnouncements = async (req, res) => {
     try {
-        const announcements = await prisma.announcements.findMany();
+        const announcements = await prisma.announcement.findMany();
         res.json(announcements);
     } catch (error) {
         console.error('Error fetching announcements:', error);
@@ -12,12 +12,12 @@ const getAllAnnouncements = async (req, res) => {
 
 const createAnnouncement = async (req, res) => {
     try {
-        const { titel, method, status } = req.body;
+        const { title, method, status } = req.body;
         const date_start = new Date(req.body.date_start);
         const date_end = new Date(req.body.date_end);
 
         const announcementsData = {
-            titel, 
+            title, 
             method, 
             date_start, 
             date_end, 
