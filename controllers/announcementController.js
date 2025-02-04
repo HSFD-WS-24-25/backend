@@ -35,6 +35,31 @@ const createAnnouncement = async (req, res) => {
     }
 };
 
+const deleteAnnouncement = async (req, res) => {
+    try {
+        const { id } = req.params;
+        await prisma.announcement.delete({
+            where: { id: parseInt(id, 10) },
+        });
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ error: "Failed to delete event" });
+    }
+};
+
+const updateAnnouncement = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedEvent = await prisma.announcement.update({
+            where: { id: parseInt(id, 10) },
+            data: req.body,
+        });
+        res.status(200).json(updateAnnouncement);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to update event" });
+    }
+};
 
 
-module.exports = { getAllAnnouncements, createAnnouncement };
+
+module.exports = { getAllAnnouncements, createAnnouncement, deleteAnnouncement, updateAnnouncement};
