@@ -61,7 +61,7 @@ const getAllInvitedGuests = async (req, res) => {
 }
 
 
-// Should the id be returned? Would allow easier invite link generation
+// Should the id/user be returned? Would allow easier invite link generation
 async function addGuestToDatabase(email) {
     const sub = 'internal';
     // Add guest to database if not already present
