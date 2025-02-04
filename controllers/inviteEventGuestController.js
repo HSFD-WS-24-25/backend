@@ -1,6 +1,7 @@
 const { sendEmail } = require('../services/emailService');
-const { prisma } = require('../prisma/prisma-client');
-const { roles } = require('../constants/roles');
+const { prisma } = require('../config/database/prisma');
+const { roles } = require('../config/roles');
+const { prepareHtmlInvite } = require('../helpers/htmlHelper');
 
 const inviteGuests = async (req, res) => {
     const emails = req.body.emails;
