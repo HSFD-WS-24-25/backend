@@ -83,7 +83,7 @@ model Event {
 
 model Announcement {
 id                       Int           @id @default(autoincrement())
-titel                    String           
+title                    String           
 method                   String
 date_start               DateTime
 date_end                 DateTime
