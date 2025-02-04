@@ -6,6 +6,15 @@ const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
 
 const getAllParticipants = async (req, res) => {
     console.log(req);
+    const allUsers = await prisma.user.findMany();
+    const allUsersTrimmed = allUsers.map((user) => {
+        return {
+            email: user.email,
+            last_name: user.last_name,
+            first_name: user.first_name,
+        };
+    });
+    return res.status(200).json(allUsersTrimmed);
 };
 
 const createParticipants = async (req, res) => {
