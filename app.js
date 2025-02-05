@@ -23,6 +23,10 @@ app.use(express.json());
 // Define all api routes in routes/api and import them in routes/api/index.js
 app.use('/api', checkJwt, checkUserInDatabase, apiRoutes);
 
+// DeepL
+const translateRoute = require("./routes/api/translate");
+app.use("/api", translateRoute);
+
 // Add Swagger UI 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
